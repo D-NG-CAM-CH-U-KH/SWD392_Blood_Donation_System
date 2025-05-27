@@ -1,12 +1,10 @@
 import React from 'react';
 import {
-  Drawer,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Typography,
   Box,
+  List,
+  ListItemText,
+  Divider,
+  ListItem,
 } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HistoryIcon from '@mui/icons-material/History';
@@ -16,7 +14,6 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Outlet } from 'react-router-dom';
 
 const navItems = [
   { text: 'Account', icon: <AccountCircleIcon /> },
@@ -31,33 +28,46 @@ const navItems = [
 
 export default function UserProfileNavbar() {
   return (
-    <Drawer
-      variant="permanent"
-      anchor="left"
-      sx={{
-        width: 240,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: 240,
-          boxSizing: 'border-box',
-          backgroundColor: '#f9fafb',
-          borderRight: '1px solid #e0e0e0',
-        },
-      }}
-    >
-      <Box sx={{ p: 2 }}>
-        <Typography variant="subtitle1" fontWeight="bold" sx={{ mb: 1 }}>
-          ACCOUNT
-        </Typography>
+    <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'start',
+          justifyContent: 'flex-start',
+          position: 'fixed',
+          width: '100%'
+        }}
+      >
         <List>
-          {navItems.map((item, index) => (
-            <ListItemButton key={index}>
-              <ListItemIcon sx={{ minWidth: 36 }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItemButton>
-          ))}
+          {navItems.map((navItem, idx) => {
+            const IconComponent = navItem.icon
+
+            return (
+              <React.Fragment key={`navItems-${idx}`}>
+                <Box
+                  sx={{ display: 'flex', alignItems: 'center', color: '#000' }}
+                >
+                  <ListItem
+                    button=""
+                    sx={{
+                      gap: 1.5,
+                      cursor: 'pointer',
+                      mt: 2,
+                      '&:hover': {
+                        backgroundColor: '#e3f2fd'
+                      },
+                    }}
+                  >
+                    {navItem.icon}
+                    {navItem.text}
+                  </ListItem>
+                </Box>
+              </React.Fragment>
+            )
+          })}
+
+          
         </List>
       </Box>
-    </Drawer>
   );
 }
