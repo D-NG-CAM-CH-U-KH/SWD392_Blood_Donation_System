@@ -7,12 +7,13 @@ import UserProfile from '~/pages/UserPage/UserProfile'
 import UserProfileForm from '~/pages/UserPage/UserProfile.component'
 import UserProfileNavbar from '~/pages/UserPage/UserProfileNavbar.component'
 import PublicRoutesComponent from './public.routes'
+import PageEndpoints from '~/meta-data/contants/page-endpoints'
 
 const RouteComponent = () => {
   return (
     <Routes>
       <Route element={<DefaultLayout />}>
-        <Route path="/" element={<LandingPage />} />
+        <Route path={PageEndpoints.PublicEndpoints.HOME_ENDPOINT} element={<LandingPage />} />
       </Route>
 
       <Route element={<ProfileLayout />}>
