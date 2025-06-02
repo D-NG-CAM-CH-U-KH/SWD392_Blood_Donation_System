@@ -6,6 +6,7 @@ import LandingPage from '~/pages/LandingPage/LandingPage'
 import UserProfile from '~/pages/UserPage/UserProfile'
 import UserProfileForm from '~/pages/UserPage/UserProfile.component'
 import UserProfileNavbar from '~/pages/UserPage/UserProfileNavbar.component'
+import PublicRoutesComponent from './public.routes'
 
 const RouteComponent = () => {
   return (
@@ -18,6 +19,7 @@ const RouteComponent = () => {
         <Route path="/profile" element={<UserProfileForm />} />
       </Route>
 
+      {PublicRoutesComponent()}
 
     </Routes>
   )
