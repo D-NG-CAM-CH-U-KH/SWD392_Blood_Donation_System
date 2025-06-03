@@ -9,8 +9,12 @@ import {
   Divider
 } from '@mui/material'
 import { RED_700, GREY_LIGHT } from '~/theme'
+import PageEndpoints from '~/meta-data/contants/page-endpoints'
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();
+
   return (
     <AppBar position="static" color="transparent" sx={{ minHeight: '85px' }}>
       <Container maxWidth="xl">
@@ -28,7 +32,7 @@ function Header() {
               variant="h6"
               noWrap
               component="a"
-              href="/home"
+              href={PageEndpoints.PublicEndpoints.HOME_ENDPOINT}
               sx={{
                 fontFamily: 'Raleway',
                 fontWeight: 800,
@@ -47,7 +51,8 @@ function Header() {
               gap: 5,
             }}
           >
-            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
+            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
+            onClick={() => navigate(PageEndpoints.PublicEndpoints.HOME_ENDPOINT)}>
               Home
             </Button>
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
@@ -56,7 +61,8 @@ function Header() {
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
               Lookup
             </Button>
-            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
+            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
+            onClick={() => navigate(PageEndpoints.PublicEndpoints.LOGIN_ENDPOINT)}>
               Login
             </Button>
           </Box>
