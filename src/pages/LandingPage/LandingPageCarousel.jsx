@@ -33,7 +33,7 @@ function LandingPageCarousel() {
           delay: 3000,
           disableOnInteraction: false
         }}
-        style={{ borderRadius: '20px', overflow: 'hidden' }}
+        style={{ borderRadius: '0px', overflow: 'hidden' }}
       >
         {slides.map((slide, index) => (
           <SwiperSlide key={index}>
