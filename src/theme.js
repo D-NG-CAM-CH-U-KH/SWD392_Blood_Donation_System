@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles'
 import '@fontsource/raleway'
+import '@fontsource/poppins'
 
 export const RED_700 = '#8B0B25'
 export const RED_600 = '#BA0F31'
@@ -28,7 +29,7 @@ const theme = createTheme({
   },
   typography: {
     allVariants: {
-      fontFamily: 'Raleway, Roboto, Arial, sans-serif',
+      fontFamily: 'Poppins, Roboto, Arial, sans-serif',
       fontWeightLight: 300,
       fontWeightRegular: 400,
       fontWeightMedium: 500,
