@@ -10,6 +10,7 @@ import { RoleEnum } from '~/meta-data/enums/role.enum'
 import { toast } from 'react-toastify'
 import PageEndpoints from '~/meta-data/contants/page-endpoints'
 import axios from 'axios'
+import AppTextField from '~/components/TextField'
 
 function LoginPage() {
   const navigate = useNavigate()
@@ -17,17 +18,6 @@ function LoginPage() {
   const [citizenID, setCitizenID] = useState('');
   const [password, setPassword] = useState('')
   const [loginMess, setLoginMess] = useState('')
-
-
-  const setTokenWithExpiry = (token) => {
-    localStorage.setItem('token', token)
-  }
-
-  const handleNavigate = () => {
-    navigate('/home');
-    window.location.reload();  // Force reload
-  };
-
 
   useEffect(() => {
     const isLoginned = localStorage.getItem('token') != null
@@ -69,8 +59,6 @@ function LoginPage() {
   }, [citizenID, password])
 
   return (
-
-
     <div>
 
       {loginMess && (
@@ -111,59 +99,23 @@ function LoginPage() {
                   Citizen ID
                   <span style={{ color: 'orange' }}> *</span>
                 </Typography>
-                <TextField
-                  id="outlined-basic"
-                  placeholder='Enter your Citizen ID'
-                  variant="outlined"
-                  type='string'
+                <AppTextField
+                  placeholder='Enter your citizen ID'
                   value={citizenID}
                   onChange={(e) => setCitizenID(e.target.value)}
-                  sx={{
-                    width: '560px',
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '15px',
-                      borderColor: 'blue',
-                      height: '60px',
-                      marginTop: '10px',
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'blue'
-                      }
-                    },
-                    '& input': {
-                      padding: '10px 15px',
-                      fontSize: '16px'
-                    }
-                  }}
                 />
+
               </Box>
               <Box sx={{ paddingTop: '30px' }}>
                 <Typography sx={{ fontWeight: 600, fontSize: 16 }}>
                   Password
                   <span style={{ color: 'orange' }}> *</span>
                 </Typography>
-                <TextField
-                  id="outlined-basic"
+                <AppTextField
                   placeholder='Enter your password'
-                  variant="outlined"
                   type='password'
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  sx={{
-                    width: '560px',
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: '15px',
-                      borderColor: 'blue',
-                      height: '60px',
-                      marginTop: '15px',
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'blue'
-                      }
-                    },
-                    '& input': {
-                      padding: '10px 15px',
-                      fontSize: '16px'
-                    }
-                  }}
                 />
               </Box>
             </Box>
@@ -190,18 +142,18 @@ function LoginPage() {
             <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', marginTop: '20px' }}>
               <Typography sx={{ fontWeight: '500', fontSize: 16 }}>Don't have an account?</Typography>
 
-              <Typography onClick={() => navigate('/register')} component={'a'} sx={{
-                color: 'orange',
-                fontWeight: 600,
-                fontSize: 16,
-                cursor: 'pointer',
-                p: 0,
-                m: 0
-              }}>
-                Sign up for free
+              <Typography onClick={() => navigate(PageEndpoints.PublicEndpoints.SIGN_UP_ENDPOINT)}
+                component={'a'} sx={{
+                  color: 'orange',
+                  fontWeight: 600,
+                  fontSize: 16,
+                  cursor: 'pointer',
+                  p: 0,
+                  m: 0
+                }}>
+                Sign up
               </Typography>
             </Box>
-
           </Box>
         </Box>
       </Box>
