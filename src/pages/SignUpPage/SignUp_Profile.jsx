@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Typography, TextField as MuiTextField, Button, Divider, InputAdornment } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import TextField from '~/components/TextField';
-import InfoIcon from "@mui/icons-material/Info";
-import AppTextField from '~/components/TextField'
 import { BLACK_COLOR, RED_600, RED_700 } from '~/theme'
 import FormTextField from '~/components/FormTextField';
 import FormSelector from '~/components/FormSelector';
-
+import { MuiTelInput } from 'mui-tel-input';
+import provinces from '~/meta-data/json/tinh_tp.json';
+import districts from '~/meta-data/json/quan_huyen.json';
+import wards from '~/meta-data/json/xa_phuong.json';
 
 const genderSelectors = [
   { name: 'Male', value: 1 },
@@ -33,24 +33,50 @@ function SignUp_Profile() {
 
   const [submitMessage, setSubmitMessage] = useState('');
 
+  const provinceOptions = Object.entries(provinces).map(([code, obj]) => ({
+    value: code,
+    name: obj.name,
+  }));
+
+  const districtOptions = Object.entries(districts)
+    .filter(([_, d]) => d.parent_code === form.city)
+    .map(([code, obj]) => ({
+      value: code,
+      name: obj.name,
+    }));
+
+  const wardOptions = Object.entries(wards)
+    .filter(([_, w]) => w.parent_code === form.district)
+    .map(([code, obj]) => ({
+      value: code,
+      name: obj.name,
+    }));
+
   const handleChange = (e) => {
-    console.log(e.target.name + ' - ' + e.target.value)
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === 'city' && { district: '', ward: '' }),
+      ...(name === 'district' && { ward: '' }),
+    }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission here
-    setSubmitMessage('Profile submitted!');
-    // For real use, replace with your API call
-  };
+  const handlePhoneChange = (value, info) => {
+    console.log(info)
+    setForm((prevForm) => ({
+      ...prevForm,
+      phone: info,
+    }));
+  }
+
 
   return (
     <Box
       sx={{
         borderRadius: 2,
         overflow: 'hidden',
-        pb: '65%',
+        padding: 5,
         backgroundSize: '150%',
         backgroundPosition: '0 5%',
         position: 'relative',
@@ -66,26 +92,37 @@ function SignUp_Profile() {
         <FormTextField valueName={'firstName'} value={form.firstName} onChange={handleChange} />
         <FormTextField valueName={'lastName'} value={form.lastName} onChange={handleChange} />
         <FormTextField valueName={'email'} value={form.email} onChange={handleChange} />
-        <FormTextField valueName={'phone'} value={form.phone} onChange={handleChange} />
         <FormSelector valueName={'gender'} value={form.gender} onChange={handleChange} selectors={genderSelectors} />
 
-      </Box>
+        {/* Phone Number */}
+        <Box sx={{ paddingTop: '20px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+          <Typography sx={{ fontWeight: 600, fontSize: 16 }}>
+            Phone number
+            <span style={{ color: 'orange' }}> *</span>
+          </Typography>
+          <MuiTelInput forceCallingCode defaultCountry="VN" onlyCountries={['VN']} disableDropdown
+            value={form.phone.nationalNumber} onChange={handlePhoneChange}
+          />
+        </Box>
 
-      {/* Login submit */}
-      <Box sx={{ marginTop: '30px', display: 'flex', justifyContent: 'center' }}>
-        <Button variant="contained" sx={{
-          borderRadius: '15px',
-          bgcolor: RED_600,
-          height: '60px',
-          width: '560px',
-          fontSize: 16,
-          boxShadow: 'none',
-          gap: 2,
-          color: '#fff'
-        }}
-        >
-          Login
-        </Button>
+        <Box sx={{ position: 'relative', border: '2px solid #ccc', borderRadius: 2, padding: 2, mt: 2 }}>
+          <Box sx={{
+            position: 'absolute', 
+            top: '-12px',
+            left: 16,
+            backgroundColor: 'white', // Match your form background
+            px: 1,
+            fontSize: 14,
+            color: 'text.secondary',
+          }}>
+            Address
+          </Box>
+          <FormSelector valueName="city" value={form.city} onChange={handleChange} selectors={provinceOptions} />
+          <FormSelector valueName="district" value={form.district} onChange={handleChange} selectors={districtOptions} />
+          <FormSelector valueName="ward" value={form.ward} onChange={handleChange} selectors={wardOptions} />
+          <FormTextField valueName="houseNumber" value={form.houseNumber} onChange={handleChange} />
+
+        </Box>
       </Box>
     </Box>
   );

@@ -7,12 +7,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { SignUpIconStepIcon } from './SignUpIcon'
 import SignUp_Profile from './SignUp_Profile';
-import { BLUE_700 } from '~/theme';
+import { BLACK_COLOR, BLUE_700 } from '~/theme';
 
 const steps = [
-  { label : 'ID documents', page: <div />},
-  { label : 'User Profile', page: <SignUp_Profile />},
-  { label : 'Verifying', page: <div />},
+  { label: 'ID documents', page: <div /> },
+  { label: 'User Profile', page: <SignUp_Profile /> },
+  { label: 'Verifying', page: <><Typography>Hellp</Typography></> },
 ];
 
 const SignUpPageComponent = () => {
@@ -62,7 +62,7 @@ const SignUpPageComponent = () => {
   };
 
   return (
-    <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center" bgcolor="#f1f3fb">
+    <Box minHeight="100vh" display="flex" alignItems="center" justifyContent="center" bgcolor="#f1f3fb" padding={5}>
       <Box
         sx={{
           width: '80vw',
@@ -110,23 +110,24 @@ const SignUpPageComponent = () => {
 
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
               <Button
-                color="inherit"
+                color={BLACK_COLOR}
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                sx={{ mr: 1 }}
+                sx={{ mr: 1, fontSize: 18 }}
               >
                 Back
               </Button>
               <Box sx={{ flex: '1 1 auto' }} />
               {isStepOptional(activeStep) && (
-                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
+                <Button color="inherit" onClick={handleSkip} sx={{ mr: 1, fontSize: 18 }}>
                   Skip
                 </Button>
               )}
-              <Button onClick={handleNext} 
-              sx={{
-                color: BLUE_700
-              }}>
+              <Button onClick={handleNext}
+                sx={{
+                  color: BLUE_700, 
+                  fontSize: 18
+                }}>
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
             </Box>

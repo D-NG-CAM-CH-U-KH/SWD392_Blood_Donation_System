@@ -1,4 +1,5 @@
 import { TextField, Box, Typography } from "@mui/material";
+import { BLACK_COLOR } from "~/theme";
 import TextUtils from "~/utils/text.utils";
 
 function formatFieldName(fieldKey) {
@@ -10,7 +11,7 @@ function formatFieldName(fieldKey) {
     .trim();
 }
 
-const FormTextField = ({ valueName, value, onChange }) => {
+const FormTextField = ({ valueName, value, onChange, type = 'text' }) => {
     const label = TextUtils.formatValueName(valueName);
 
     return <Box sx={{ paddingTop: '20px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
@@ -21,7 +22,7 @@ const FormTextField = ({ valueName, value, onChange }) => {
         <TextField
             placeholder={`Enter your ${label}`}
             variant="outlined"
-            type={'text'}
+            type={type}
             name={valueName}
             value={value}
             onChange={onChange}
@@ -32,14 +33,9 @@ const FormTextField = ({ valueName, value, onChange }) => {
                     borderRadius: '15px',
                     height: '60px',
                     marginTop: '10px',
-                    '& fieldset': {
-                        borderColor: 'blue',
-                    },
-                    '&:hover fieldset': {
-                        borderColor: 'blue',
-                    },
+
                     '&.Mui-focused fieldset': {
-                        borderColor: 'blue',
+                        borderColor: BLACK_COLOR
                     },
                 },
                 '& input': {
