@@ -108,19 +108,19 @@ function SignUp_Profile() {
             </Typography>
             <MuiTelInput forceCallingCode defaultCountry="VN" onlyCountries={['VN']} disableDropdown
               value={form.phone.nationalNumber} onChange={handlePhoneChange}
-              sx = {{
-                  width: '400px',
-                  marginTop: '10px',
+              sx={{
+                width: '400px',
+                marginTop: '10px',
+                borderRadius: '15px',
+                backgroundColor: 'white',
+                '& .MuiOutlinedInput-root': {
                   borderRadius: '15px',
-                  backgroundColor: 'white',
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: '15px',
-                    height: '60px',
-                    '&.Mui-focused fieldset': {
-                        borderColor: BLACK_COLOR
-                    },
+                  height: '60px',
+                  '&.Mui-focused fieldset': {
+                    borderColor: BLACK_COLOR
+                  },
                 },
-                }
+              }
               }
             />
           </Box>
@@ -141,12 +141,15 @@ function SignUp_Profile() {
             Address
           </Box>
           <FormSelector valueName="city" value={form.city} onChange={handleChange} selectors={provinceOptions} />
-          <FormSelector valueName="district" value={form.district} onChange={handleChange} selectors={districtOptions}
-            disabled={form.city === null || form.city === ''}
-          />
-          <FormSelector valueName="ward" value={form.ward} onChange={handleChange} selectors={wardOptions}
-            disabled={form.district === null || form.district === ''}
-          />
+          
+          <Box sx={{ display: 'flex', gap: '1rem' }}>
+            <FormSelector width='270px' valueName="district" value={form.district} onChange={handleChange} selectors={districtOptions}
+              disabled={form.city === null || form.city === ''}
+            />
+            <FormSelector width='270px' valueName="ward" value={form.ward} onChange={handleChange} selectors={wardOptions}
+              disabled={form.district === null || form.district === ''}
+            />
+          </Box>
           <FormTextField valueName="houseNumber" value={form.houseNumber} onChange={handleChange}
             disabled={form.ward === null || form.ward === ''}
           />
