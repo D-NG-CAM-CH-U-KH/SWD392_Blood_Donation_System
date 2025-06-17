@@ -89,25 +89,48 @@ function SignUp_Profile() {
         </Typography>
 
         <FormTextField valueName={'citizenID'} value={form.citizenID} onChange={handleChange} />
-        <FormTextField valueName={'firstName'} value={form.firstName} onChange={handleChange} />
-        <FormTextField valueName={'lastName'} value={form.lastName} onChange={handleChange} />
-        <FormTextField valueName={'email'} value={form.email} onChange={handleChange} />
-        <FormSelector valueName={'gender'} value={form.gender} onChange={handleChange} selectors={genderSelectors} />
 
-        {/* Phone Number */}
-        <Box sx={{ paddingTop: '20px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-          <Typography sx={{ fontWeight: 600, fontSize: 16 }}>
-            Phone number
-            <span style={{ color: 'orange' }}> *</span>
-          </Typography>
-          <MuiTelInput forceCallingCode defaultCountry="VN" onlyCountries={['VN']} disableDropdown
-            value={form.phone.nationalNumber} onChange={handlePhoneChange}
-          />
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <FormTextField width='270px' valueName={'firstName'} value={form.firstName} onChange={handleChange} />
+          <FormTextField width='270px' valueName={'lastName'} value={form.lastName} onChange={handleChange} />
         </Box>
+
+        <FormTextField valueName={'email'} value={form.email} onChange={handleChange} />
+
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <FormSelector width='150px' valueName={'gender'} value={form.gender} onChange={handleChange} selectors={genderSelectors} />
+
+          {/* Phone Number */}
+          <Box sx={{ paddingTop: '20px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+            <Typography sx={{ fontWeight: 600, fontSize: 16 }}>
+              Phone number
+              <span style={{ color: 'orange' }}> *</span>
+            </Typography>
+            <MuiTelInput forceCallingCode defaultCountry="VN" onlyCountries={['VN']} disableDropdown
+              value={form.phone.nationalNumber} onChange={handlePhoneChange}
+              sx = {{
+                  width: '400px',
+                  marginTop: '10px',
+                  borderRadius: '15px',
+                  backgroundColor: 'white',
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '15px',
+                    height: '60px',
+                    '&.Mui-focused fieldset': {
+                        borderColor: BLACK_COLOR
+                    },
+                },
+                }
+              }
+            />
+          </Box>
+
+        </Box>
+
 
         <Box sx={{ position: 'relative', border: '2px solid #ccc', borderRadius: 2, padding: 2, mt: 2 }}>
           <Box sx={{
-            position: 'absolute', 
+            position: 'absolute',
             top: '-12px',
             left: 16,
             backgroundColor: 'white', // Match your form background
@@ -118,9 +141,15 @@ function SignUp_Profile() {
             Address
           </Box>
           <FormSelector valueName="city" value={form.city} onChange={handleChange} selectors={provinceOptions} />
-          <FormSelector valueName="district" value={form.district} onChange={handleChange} selectors={districtOptions} />
-          <FormSelector valueName="ward" value={form.ward} onChange={handleChange} selectors={wardOptions} />
-          <FormTextField valueName="houseNumber" value={form.houseNumber} onChange={handleChange} />
+          <FormSelector valueName="district" value={form.district} onChange={handleChange} selectors={districtOptions}
+            disabled={form.city === null || form.city === ''}
+          />
+          <FormSelector valueName="ward" value={form.ward} onChange={handleChange} selectors={wardOptions}
+            disabled={form.district === null || form.district === ''}
+          />
+          <FormTextField valueName="houseNumber" value={form.houseNumber} onChange={handleChange}
+            disabled={form.ward === null || form.ward === ''}
+          />
 
         </Box>
       </Box>

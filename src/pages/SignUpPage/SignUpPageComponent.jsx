@@ -8,9 +8,10 @@ import Typography from '@mui/material/Typography';
 import { SignUpIconStepIcon } from './SignUpIcon'
 import SignUp_Profile from './SignUp_Profile';
 import { BLACK_COLOR, BLUE_700 } from '~/theme';
+import SignUp_UploadCitizenId from './SignUp_UploadCitizenId';
 
 const steps = [
-  { label: 'ID documents', page: <div /> },
+  { label: 'ID documents', page: <SignUp_UploadCitizenId />},
   { label: 'User Profile', page: <SignUp_Profile /> },
   { label: 'Verifying', page: <><Typography>Hellp</Typography></> },
 ];

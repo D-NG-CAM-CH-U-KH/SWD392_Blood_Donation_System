@@ -10,6 +10,7 @@ export const RED_300 = '#FFD8DF'
 export const BG_COLOR = '#FEFEFE'
 export const BLACK_COLOR = '#13141B'
 export const BLUE_700 = '#39267D'
+export const BLUE_NORMAL = '#1a73e8'
 export const GREY_LIGHT = '#4B4B4B'
 
 const theme = createTheme({

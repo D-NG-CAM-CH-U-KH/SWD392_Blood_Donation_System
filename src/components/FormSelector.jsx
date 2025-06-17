@@ -1,8 +1,8 @@
 import { Box, MenuItem, Select, Typography, FormControl } from "@mui/material";
-import { BLACK_COLOR } from "~/theme";
+import { GREY_LIGHT } from "~/theme";
 import TextUtils from "~/utils/text.utils";
 
-const FormSelector = ({ valueName, selectors, value, onChange }) => {
+const FormSelector = ({ valueName, selectors, value, onChange, width = '560px', ...formControlProps }) => {
     const label = TextUtils.formatValueName(valueName);
 
     return (
@@ -18,6 +18,7 @@ const FormSelector = ({ valueName, selectors, value, onChange }) => {
                     name={valueName}
                     value={value}
                     onChange={onChange}
+                    {...formControlProps}
                     MenuProps={{
                         anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
                         transformOrigin: { vertical: 'top', horizontal: 'left' },
@@ -29,17 +30,15 @@ const FormSelector = ({ valueName, selectors, value, onChange }) => {
                         },
                     }}
                     sx={{
-                        width: '560px',
-                        '& .MuiOutlinedInput-root': {
-                            borderRadius: '15px',
-                            height: '60px',
-                            marginTop: '10px',
-
-                            '&.Mui-focused fieldset': {
-                                borderColor: BLACK_COLOR
-                            },
+                        width: width,
+                        marginTop: '10px',
+                        borderRadius: '15px',
+                        height: '60px',
+                        backgroundColor: 'white',
+                        '& .Mui-disabled': {
+                            cursor: 'not-allowed',
                         },
-                        '& input': {
+                        '& .MuiSelect-select': {
                             padding: '10px 15px',
                             fontSize: '16px',
                         },
