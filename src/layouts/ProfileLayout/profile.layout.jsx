@@ -1,9 +1,10 @@
-import { Box, Container, Grid } from '@mui/material'
+import { Box, Container, Divider, Grid } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 import { BG_COLOR } from '~/theme'
 import Footer from '~/layouts/Footer.jsx'
 import Header from '~/layouts/Header.jsx'
 import UserProfileNavbar from '~/pages/UserPage/UserProfileNavbar.component'
+import SideNavbarProfile from '~/pages/ProfilePage/SideNavbarProfile'
 
 const ProfileLayout = () => {
     return (
@@ -19,13 +20,11 @@ const ProfileLayout = () => {
             <Container maxWidth={'xl'}>
                 {/* HEADER */}
                 <Header />
-                <Box justifyContent={'space-between'} display={'flex'} flexDirection={'row'}>
-                    <Box>
-                        <UserProfileNavbar/>
-                    </Box>
-                    <Box>
-                        <Outlet />
-                    </Box>
+                <Box display={'flex'} flexDirection={'row'} >
+                    <SideNavbarProfile />
+                    <Divider orientation='vertical' flexItem          // Giúp Divider kéo dài hết chiều cao của flex box
+                        sx={{ mx: 2 }} />
+                    <Outlet />
                 </Box>
                 {/* FOOTER */}
                 <Footer />

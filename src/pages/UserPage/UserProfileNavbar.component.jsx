@@ -33,9 +33,7 @@ export default function UserProfileNavbar() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'start',
-          justifyContent: 'flex-start',
-          position: 'fixed',
-          width: '100%'
+          justifyContent: 'flex-start'
         }}
       >
         <List>
@@ -43,7 +41,7 @@ export default function UserProfileNavbar() {
             const IconComponent = navItem.icon
 
             return (
-              <React.Fragment key={`navItems-${idx}`}>
+              // <React.Fragment key={`navItems-${idx}`}>
                 <Box
                   sx={{ display: 'flex', alignItems: 'center', color: '#000' }}
                 >
@@ -62,7 +60,7 @@ export default function UserProfileNavbar() {
                     {navItem.text}
                   </ListItem>
                 </Box>
-              </React.Fragment>
+              // </React.Fragment>
             )
           })}
 
