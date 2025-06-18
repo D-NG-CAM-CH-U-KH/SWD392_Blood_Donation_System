@@ -1,16 +1,18 @@
 import React from 'react'
-import LandingPageCarousel from '~/pages/LandingPage/LandingPageCarousel'
-import LandingPageRegister from './LandingPageRegister'
-import LatestNews from './LatestNews'
-import OurCommunity from './OurCommunity'
+import Background from './Background'
+import ServiceComponents from './ServiceComponents'
+import VideoIntroduction from './VideoIntroduction'
+import Facts from './Facts'
+import WaysToGive from './WaysToGive'
 
 function LandingPage() {
   return (
     <div>
-      <LandingPageCarousel />
-      <LandingPageRegister />
-      <LatestNews />
-      <OurCommunity />
+      <Background />
+      <ServiceComponents />
+      <VideoIntroduction />
+      <Facts />
+      <WaysToGive />
     </div>
   )
 }
