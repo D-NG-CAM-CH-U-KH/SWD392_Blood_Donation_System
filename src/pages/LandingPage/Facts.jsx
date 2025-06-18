@@ -12,7 +12,7 @@ function Facts() {
           Facts About Blood Needs
         </Typography>
         <Box sx={{ display: 'flex' }}>
-          <img src="/src/assets/images/drop.png" style={{ width: 100, height: 100 }} />
+          <img src="/src/assets/images/blood-bag.png" style={{ width: 100, height: 100 }} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ width: '550px' }}>
               <Typography sx={{ fontSize: 15, fontWeight: 400 }}>
@@ -32,7 +32,7 @@ function Facts() {
           What Happens to Donated Blood?
         </Typography>
         <Box sx={{ display: 'flex' }}>
-          <img src="/src/assets/images/drop.png" style={{ width: 100, height: 100 }} />
+          <img src="/src/assets/images/donor.png" style={{ width: 100, height: 100 }} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ width: '550px' }}>
               <Typography sx={{ fontSize: 15, fontWeight: 400 }}>
