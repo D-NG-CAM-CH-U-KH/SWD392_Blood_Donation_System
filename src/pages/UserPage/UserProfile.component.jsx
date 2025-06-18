@@ -78,7 +78,7 @@ export default function UserProfileForm() {
   );
 
   return (
-    <Box sx={{ maxWidth: 900, mx: 'auto', p:   4 }}>
+    <Box sx={{display: 'flex', alignItems: 'center', flexDirection: 'column', width: 1000}}>
       <Typography variant="h5" fontWeight="bold" color="error" gutterBottom>
         Blood Donation System Management
       </Typography>

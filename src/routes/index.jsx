@@ -8,6 +8,7 @@ import UserProfileForm from '~/pages/UserPage/UserProfile.component'
 import UserProfileNavbar from '~/pages/UserPage/UserProfileNavbar.component'
 import PublicRoutesComponent from './public.routes'
 import PageEndpoints from '~/meta-data/contants/page-endpoints'
+import ProfileCard from '~/pages/ProfilePage/ProfileCard'
 
 const RouteComponent = () => {
   return (
@@ -17,7 +18,7 @@ const RouteComponent = () => {
       </Route>
 
       <Route element={<ProfileLayout />}>
-        <Route path="/profile" element={<UserProfileForm />} />
+        <Route path="/profile" element={<ProfileCard />} />
       </Route>
 
       {PublicRoutesComponent()}
