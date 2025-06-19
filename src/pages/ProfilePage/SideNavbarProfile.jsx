@@ -10,7 +10,7 @@ import {
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import VaccinesIcon from "@mui/icons-material/Vaccines";
 import HistoryIcon from "@mui/icons-material/History";
-import React from "react";
+import React, { useState } from "react";
 
 const navbarItem = [
     {
@@ -28,8 +28,9 @@ const navbarItem = [
 ];
 
 function SideNavbarProfile() {
+
     return (
-        <Box display="flex" flexDirection="column" width={400} p={2} alignItems={'center'}>
+        <Box display="flex" flexDirection="column" width={400} p={2}>
             <Typography variant="h6" mb={2} fontWeight={'bold'} fontSize={40}>
                 Profile
             </Typography>
@@ -44,6 +45,7 @@ function SideNavbarProfile() {
                             "&:hover": {
                                 backgroundColor: "#f5f5f5",
                             },
+                            width: 300
                         }}
                     >
                         <ListItemAvatar>{item.icon}</ListItemAvatar>
