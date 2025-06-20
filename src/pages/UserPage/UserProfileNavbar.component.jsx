@@ -29,45 +29,43 @@ const navItems = [
 export default function UserProfileNavbar() {
   return (
     <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'start',
-          justifyContent: 'flex-start',
-          position: 'fixed',
-          width: '100%'
-        }}
-      >
-        <List>
-          {navItems.map((navItem, idx) => {
-            const IconComponent = navItem.icon
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
+        justifyContent: 'flex-start'
+      }}
+    >
+      <List>
+        {navItems.map((navItem, idx) => {
+          const IconComponent = navItem.icon
 
-            return (
-              <React.Fragment key={`navItems-${idx}`}>
-                <Box
-                  sx={{ display: 'flex', alignItems: 'center', color: '#000' }}
-                >
-                  <ListItem
-                    button=""
-                    sx={{
-                      gap: 1.5,
-                      cursor: 'pointer',
-                      mt: 2,
-                      '&:hover': {
-                        backgroundColor: '#e3f2fd'
-                      },
-                    }}
-                  >
-                    {navItem.icon}
-                    {navItem.text}
-                  </ListItem>
-                </Box>
-              </React.Fragment>
-            )
-          })}
+          return (
+            // <React.Fragment key={`navItems-${idx}`}>
+            <Box
+              sx={{ display: 'flex', alignItems: 'center', color: '#000' }}
+            >
+              <ListItem
+                button=""
+                sx={{
+                  gap: 1.5,
+                  cursor: 'pointer',
+                  mt: 2,
+                  '&:hover': {
+                    backgroundColor: '#e3f2fd'
+                  },
+                }}
+              >
+                {navItem.icon}
+                {navItem.text}
+              </ListItem>
+            </Box>
+            // </React.Fragment>
+          )
+        })}
 
-          
-        </List>
-      </Box>
+
+      </List>
+    </Box>
   );
 }
