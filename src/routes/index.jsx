@@ -8,6 +8,7 @@ import UserProfileForm from '~/pages/UserPage/UserProfile.component'
 import UserProfileNavbar from '~/pages/UserPage/UserProfileNavbar.component'
 import PublicRoutesComponent from './public.routes'
 import PageEndpoints from '~/meta-data/contants/page-endpoints'
+import CreateBloodRequest from '~/pages/BloodRequestPage/BloodRequest.jsx';
 
 const RouteComponent = () => {
   return (
@@ -19,6 +20,9 @@ const RouteComponent = () => {
       <Route element={<ProfileLayout />}>
         <Route path="/profile" element={<UserProfileForm />} />
       </Route>
+
+      {/* Route for CreateBloodRequest */}
+      <Route path="/request/create" element={<CreateBloodRequest />} />
 
       {PublicRoutesComponent()}
 
