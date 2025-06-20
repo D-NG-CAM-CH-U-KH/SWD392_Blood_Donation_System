@@ -10,15 +10,18 @@ import SignUp_Profile from './SignUp_Profile';
 import { BLACK_COLOR, BLUE_700 } from '~/theme';
 import SignUp_UploadCitizenId from './SignUp_UploadCitizenId';
 
-const steps = [
-  { label: 'ID documents', page: <SignUp_UploadCitizenId />},
-  { label: 'User Profile', page: <SignUp_Profile /> },
-  { label: 'Verifying', page: <><Typography>Hellp</Typography></> },
-];
+
 
 const SignUpPageComponent = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+  const profileRef = React.useRef();
+
+  const steps = [
+    { label: 'ID documents', page: <SignUp_UploadCitizenId ref={profileRef}/> },
+    { label: 'User Profile', page: <SignUp_Profile ref={profileRef} /> },
+    { label: 'Verifying', page: <><Typography>Verifying...</Typography></> },
+  ];
 
   const isStepOptional = (step) => {
     return step === 0;
@@ -33,6 +36,12 @@ const SignUpPageComponent = () => {
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
+    }
+
+    const result = profileRef.current?.onNext?.(); // Call child function
+    if (result === false) {
+      console.log('Validation failed. Do not proceed.');
+      return;
     }
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -126,7 +135,7 @@ const SignUpPageComponent = () => {
               )}
               <Button onClick={handleNext}
                 sx={{
-                  color: BLUE_700, 
+                  color: BLUE_700,
                   fontSize: 18
                 }}>
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}

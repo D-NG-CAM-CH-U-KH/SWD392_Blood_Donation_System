@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { BLACK_COLOR, RED_600, RED_700 } from '~/theme'
@@ -11,10 +11,10 @@ import wards from '~/meta-data/json/xa_phuong.json';
 
 const genderSelectors = [
   { name: 'Male', value: 1 },
-  { name: 'Female', value: 2 },
+  { name: 'Female', value: 0 },
 ]
 
-function SignUp_Profile() {
+const SignUp_Profile = forwardRef((props, ref) => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -24,7 +24,7 @@ function SignUp_Profile() {
     password: '',
     citizenID: '',
     phone: '',
-    gender: '',
+    gender: 1,
     city: '',
     district: '',
     ward: '',
@@ -70,6 +70,23 @@ function SignUp_Profile() {
     }));
   }
 
+  // Custom logic to run when parent clicks "Next"
+  const onNext = () => {
+    try {
+      console.log("Custom next logic from SignUp_Profile");
+      // throw new Error("Not implement");
+    }
+    catch (err) {
+      console.log("Next error: ", err)
+      return false;
+    }
+    return true;
+  };
+
+  // Expose `onNext` to parent via ref
+  useImperativeHandle(ref, () => ({
+    onNext
+  }));
 
   return (
     <Box
@@ -141,7 +158,7 @@ function SignUp_Profile() {
             Address
           </Box>
           <FormSelector valueName="city" value={form.city} onChange={handleChange} selectors={provinceOptions} />
-          
+
           <Box sx={{ display: 'flex', gap: '1rem' }}>
             <FormSelector width='270px' valueName="district" value={form.district} onChange={handleChange} selectors={districtOptions}
               disabled={form.city === null || form.city === ''}
@@ -158,6 +175,6 @@ function SignUp_Profile() {
       </Box>
     </Box>
   );
-}
+})
 
 export default SignUp_Profile;

@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import { Box, Typography } from '@mui/material';
 import { BLACK_COLOR, RED_700 } from '~/theme';
 import UploadBox from '~/components/UploadBox';
 
-const SignUp_UploadCitizenId = () => {
+const SignUp_UploadCitizenId = forwardRef((props, ref) => {
+    const onNext = () => {
+        try {
+            console.log("Custom next logic from SignUp_UploadCitizenId");
+        }
+        catch (err) {
+            console.log("Next error: ", err)
+            return false;
+        }
+        return true;
+    };
+
+    // Expose `onNext` to parent via ref
+    useImperativeHandle(ref, () => ({
+        onNext
+    }));
 
     return (
         <Box
@@ -54,5 +69,5 @@ const SignUp_UploadCitizenId = () => {
         </Box>
 
     );
-}
+})
 export default SignUp_UploadCitizenId;
