@@ -1,7 +1,8 @@
-import { Box, InputLabel, MenuItem, Select, Typography, FormControl } from "@mui/material";
+import { Box, MenuItem, Select, Typography, FormControl } from "@mui/material";
+import { GREY_LIGHT } from "~/theme";
 import TextUtils from "~/utils/text.utils";
 
-const FormSelector = ({ valueName, selectors, value, onChange }) => {
+const FormSelector = ({ valueName, selectors, value, onChange, width = '560px', ...formControlProps }) => {
     const label = TextUtils.formatValueName(valueName);
 
     return (
@@ -11,14 +12,37 @@ const FormSelector = ({ valueName, selectors, value, onChange }) => {
                 <span style={{ color: 'orange' }}> *</span>
             </Typography>
             <FormControl fullWidth>
-                <InputLabel id={`${valueName}-label`}>{valueName}</InputLabel>
                 <Select
                     labelId={`${valueName}-label`}
                     id={`${valueName}-select`}
                     name={valueName}
                     value={value}
-                    label={label}
                     onChange={onChange}
+                    {...formControlProps}
+                    MenuProps={{
+                        anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+                        transformOrigin: { vertical: 'top', horizontal: 'left' },
+                        PaperProps: {
+                            style: {
+                                maxHeight: 200,
+                                borderRadius: 12, // rounded dropdown
+                            },
+                        },
+                    }}
+                    sx={{
+                        width: width,
+                        marginTop: '10px',
+                        borderRadius: '15px',
+                        height: '60px',
+                        backgroundColor: 'white',
+                        '& .Mui-disabled': {
+                            cursor: 'not-allowed',
+                        },
+                        '& .MuiSelect-select': {
+                            padding: '10px 15px',
+                            fontSize: '16px',
+                        },
+                    }}
                 >
                     {selectors.map((selector) => (
                         <MenuItem key={selector.value} value={selector.value}>
