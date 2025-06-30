@@ -62,6 +62,10 @@ function Header() {
               Lookup
             </Button>
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
+            onClick={() => navigate('/blood-donation/create')}>
+              Blood Appointment
+            </Button>
+            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
             onClick={() => navigate(PageEndpoints.PublicEndpoints.LOGIN_ENDPOINT)}>
               Login
             </Button>
