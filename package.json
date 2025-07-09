@@ -19,12 +19,9 @@
     "@mui/x-date-pickers": "^8.5.3",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
-<<<<<<< HEAD
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
-=======
     "mui-tel-input": "^9.0.1",
->>>>>>> 9da49fce830d66da078ee142e0053d305ad4f08f
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^18.2.0",
@@ -36,12 +33,12 @@
   "devDependencies": {
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
-    "@vitejs/plugin-react-swc": "^3.5.0",
+    "@vitejs/plugin-react-swc": "^3.10.2",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5"
+    "vite": "^5.4.19"
   }
 }
