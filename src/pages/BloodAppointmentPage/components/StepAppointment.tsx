@@ -12,10 +12,15 @@ import {
     timeSlots: string[];
     note: string;
     setNote: (note: string) => void;
+    otherTimeReason?: string;
+    setOtherTimeReason?: (reason: string) => void;
+    location: string;
+    setLocation: (location: string) => void;
   }
   
   const StepAppointment: React.FC<StepAppointmentProps> = ({
-    selectedDate, setSelectedDate, selectedTimeSlot, setSelectedTimeSlot, errors, timeSlots, note, setNote
+    selectedDate, setSelectedDate, selectedTimeSlot, setSelectedTimeSlot, errors, timeSlots, note, setNote,
+    otherTimeReason = '', setOtherTimeReason = () => {}, location, setLocation
   }) => (
     <Box>
       <Box textAlign="center" mb={4}>
@@ -25,7 +30,7 @@ import {
       <Alert severity="success" sx={{ mb: 3 }}>
         <Typography><strong>Thông tin của bạn:</strong> Nhóm máu: AB+</Typography>
       </Alert>
-      <Grid item xs={12} marginBottom={3}>
+      <Grid sx={{ mb: 3 }}>
         <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontSize: 16 }}>Chọn ngày hiến máu</Typography>
         <TextField
           fullWidth
@@ -43,7 +48,7 @@ import {
           }}
         />
       </Grid>
-      <Grid item xs={12} marginBottom={3}>
+      <Grid sx={{ mb: 3 }}>
         <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontSize: 16 }}>Chọn khung giờ</Typography>
         <Grid container spacing={2}>
           {timeSlots.map(slot => (
@@ -64,18 +69,46 @@ import {
               </Button>
             </Grid>
           ))}
+          {/* <Grid item xs={6} sm={3} key="other">
+            <Button
+              fullWidth
+              variant={selectedTimeSlot.startsWith('Khác:') ? 'contained' : 'outlined'}
+              color={selectedTimeSlot.startsWith('Khác:') ? 'primary' : 'inherit'}
+              onClick={() => setSelectedTimeSlot('Khác:')}
+              sx={{
+                py: 2,
+                borderRadius: 2,
+                fontWeight: 500,
+                fontSize: 16,
+              }}
+            >
+              Khác
+            </Button>
+          </Grid> */}
         </Grid>
+        {selectedTimeSlot.startsWith('Khác:') && (
+          <TextField
+            fullWidth
+            label="Lý do chọn khung giờ khác"
+            value={otherTimeReason}
+            onChange={e => {
+              setOtherTimeReason(e.target.value);
+              setSelectedTimeSlot('Khác: ' + e.target.value);
+            }}
+            sx={{ mt: 2 }}
+          />
+        )}
         {errors.selectedTimeSlot && (
           <Typography color="error" variant="caption" sx={{ fontSize: 14 }}>{errors.selectedTimeSlot}</Typography>
         )}
       </Grid>
-      <Grid item xs={12} marginBottom={3}>
+      <Grid sx={{ mb: 3 }}>
         <Alert severity="info">
           <AlertTitle>Lưu ý:</AlertTitle>
           Vui lòng chọn ngày và giờ phù hợp với lịch trình của bạn. Chúng tôi sẽ liên hệ để xác nhận lịch hẹn trước ngày hiến máu.
         </Alert>
       </Grid>
-      <Grid item xs={12} marginBottom={3}>
+      <Grid sx={{ mb: 3 }}>
         <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontSize: 16 }}>Ghi chú thêm</Typography>
         <TextField
           fullWidth
@@ -97,6 +130,17 @@ import {
               padding: 0,
             },
           }}
+        />
+      </Grid>
+      <Grid sx={{ mb: 3 }}>
+        <Typography variant="subtitle1" fontWeight={700} mb={1} sx={{ fontSize: 16 }}>Địa điểm hiến máu</Typography>
+        <TextField
+          fullWidth
+          label="Nhập địa điểm hiến máu"
+          value={location}
+          onChange={e => setLocation(e.target.value)}
+          placeholder="Ví dụ: Bệnh viện Chợ Rẫy, TP.HCM"
+          sx={{ fontSize: 16, '& .MuiInputBase-root': { fontSize: 16 } }}
         />
       </Grid>
     </Box>
