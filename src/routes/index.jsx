@@ -12,6 +12,8 @@ import PageEndpoints from '~/meta-data/contants/page-endpoints'
 import ProfileCard from '~/pages/ProfilePage/ProfileCard'
 import CreateBloodRequest from '~/pages/BloodRequestPage/BloodRequest.jsx';
 import BloodAppointment from "~/pages/BloodAppointmentPage/BloodAppointment.component";
+import BloodDonorLookup from '~/pages/BloodDonorLookupPage/BloodDonorLookupPage.component'
+import BloodDonorLookupLayout from '~/layouts/BloodDonorLookupLayout/blood-donor-lookup.layout'
 
 
 const RouteComponent = () => {
@@ -31,6 +33,11 @@ const RouteComponent = () => {
       {/* Route for BloodAppointment */}
       <Route element={<BloodAppointmentLayout />}>
         <Route path="/blood-donation/create" element={<BloodAppointment />} />
+      </Route>
+
+      {/* Route for BloodDonorSearchLookup */}
+      <Route element={<BloodDonorLookupLayout />}>
+        <Route path="/blood-donor/lookup" element={<BloodDonorLookup />} />
       </Route>
 
       {PublicRoutesComponent()}
