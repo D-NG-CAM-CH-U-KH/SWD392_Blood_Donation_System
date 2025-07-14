@@ -2,22 +2,32 @@ import React, { forwardRef, useImperativeHandle } from 'react';
 import { Box, Typography } from '@mui/material';
 import { BLACK_COLOR, RED_700 } from '~/theme';
 import UploadBox from '~/components/UploadBox';
+import { toast } from 'react-toastify';
 
-const SignUp_UploadCitizenId = forwardRef((props, ref) => {
+const SignUp_UploadCitizenId = forwardRef(({ signUpForm, setSignUpForm }, ref) => {
+    const handleFrontFile = (file) => {
+        setSignUpForm(prev => ({
+            ...prev,
+            frontCardFile: file,
+        }));
+    };
+
+    const handleBackFile = (file) => {
+        setSignUpForm(prev => ({
+            ...prev,
+            backCardFile: file,
+        }));
+    };
     const onNext = () => {
-        try {
-            console.log("Custom next logic from SignUp_UploadCitizenId");
-        }
-        catch (err) {
-            console.log("Next error: ", err)
-            return false;
+        if (!signUpForm.frontCardFile || !signUpForm.backCardFile) {
+            toast.error("Please upload both front and back of the ID.");
+            return false; // prevent moving to next step
         }
         return true;
     };
 
-    // Expose `onNext` to parent via ref
     useImperativeHandle(ref, () => ({
-        onNext
+        onNext,
     }));
 
     return (
@@ -49,7 +59,7 @@ const SignUp_UploadCitizenId = forwardRef((props, ref) => {
                 }}>
                     Front Side of Citizen ID:
                 </Typography>
-                <UploadBox />
+                <UploadBox file={signUpForm.frontCardFile} setFile={handleFrontFile} />
             </Box>
 
             <Box>
@@ -64,7 +74,7 @@ const SignUp_UploadCitizenId = forwardRef((props, ref) => {
                 }}>
                     Back Side of Citizen ID:
                 </Typography>
-                <UploadBox />
+                <UploadBox file={signUpForm.backCardFile} setFile={handleBackFile} />
             </Box>
         </Box>
 
