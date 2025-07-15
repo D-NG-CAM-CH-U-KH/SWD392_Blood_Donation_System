@@ -12,6 +12,7 @@ import PageEndpoints from '~/meta-data/contants/page-endpoints'
 import ProfileCard from '~/pages/ProfilePage/ProfileCard'
 import CreateBloodRequest from '~/pages/BloodRequestPage/BloodRequest.jsx';
 import BloodAppointment from "~/pages/BloodAppointmentPage/BloodAppointment.component";
+import Index from '~/pages/StaffManagement/Index'
 
 
 const RouteComponent = () => {
@@ -31,6 +32,10 @@ const RouteComponent = () => {
       {/* Route for BloodAppointment */}
       <Route element={<BloodAppointmentLayout />}>
         <Route path="/blood-donation/create" element={<BloodAppointment />} />
+      </Route>
+
+      <Route element={<Index />}>
+        <Route path="/staff" element={<Index />} />
       </Route>
 
       {PublicRoutesComponent()}

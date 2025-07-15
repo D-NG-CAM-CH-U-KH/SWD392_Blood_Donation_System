@@ -9,7 +9,7 @@ export default class PublicAPI {
             citizenID: username,
             password: password
         });
-        const response : ResponseDto<LoginResponseDto> = axiosResposne.data; 
+        const response: ResponseDto<LoginResponseDto> = axiosResposne.data;
         const data = response.data;
 
         if (availableRole && data.roles.includes(availableRole)) {
