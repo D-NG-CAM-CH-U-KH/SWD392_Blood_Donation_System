@@ -17,5 +17,7 @@ export default class ApiEndPoints {
     static readonly CREATE_ACCOUNT_ENDPOINT = this.ACCOUNT_ENDPOINT;
     static readonly UPDATE_ACCOUNT_ENDPOINT = `${this.ACCOUNT_ENDPOINT}/{id}`;
     static readonly DELETE_ACCOUNT_ENDPOINT = `${this.ACCOUNT_ENDPOINT}/{id}`;
+
+    static readonly CREATE_ACCOUNT_WITH_CITIZEN_CARD_ENDPOINT = `${this.ACCOUNT_ENDPOINT}/create-with-citizen-card`;
   };
 }

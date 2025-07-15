@@ -8,30 +8,17 @@ import { MuiTelInput } from 'mui-tel-input';
 import provinces from '~/meta-data/json/tinh_tp.json';
 import districts from '~/meta-data/json/quan_huyen.json';
 import wards from '~/meta-data/json/xa_phuong.json';
+import { toast } from 'react-toastify';
+import PublicAPI from '~/api/public-api';
 
 const genderSelectors = [
   { name: 'Male', value: 1 },
   { name: 'Female', value: 0 },
 ]
 
-const SignUp_Profile = forwardRef((props, ref) => {
-  const navigate = useNavigate();
-
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    citizenID: '',
-    phone: '',
-    gender: 1,
-    city: '',
-    district: '',
-    ward: '',
-    houseNumber: '',
-  });
-
-  const [submitMessage, setSubmitMessage] = useState('');
+const SignUp_Profile = forwardRef(({ signUpForm, setSignUpForm }, ref) => {
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
 
   const provinceOptions = Object.entries(provinces).map(([code, obj]) => ({
     value: code,
@@ -39,14 +26,14 @@ const SignUp_Profile = forwardRef((props, ref) => {
   }));
 
   const districtOptions = Object.entries(districts)
-    .filter(([_, d]) => d.parent_code === form.city)
+    .filter(([_, d]) => d.parent_code === signUpForm.city)
     .map(([code, obj]) => ({
       value: code,
       name: obj.name,
     }));
 
   const wardOptions = Object.entries(wards)
-    .filter(([_, w]) => w.parent_code === form.district)
+    .filter(([_, w]) => w.parent_code === signUpForm.district)
     .map(([code, obj]) => ({
       value: code,
       name: obj.name,
@@ -54,7 +41,7 @@ const SignUp_Profile = forwardRef((props, ref) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({
+    setSignUpForm((prev) => ({
       ...prev,
       [name]: value,
       ...(name === 'city' && { district: '', ward: '' }),
@@ -62,27 +49,45 @@ const SignUp_Profile = forwardRef((props, ref) => {
     }));
   };
 
+
   const handlePhoneChange = (value, info) => {
     console.log(info)
-    setForm((prevForm) => ({
-      ...prevForm,
-      phone: info,
-    }));
+
+    setPhoneNumber(info);
   }
 
-  // Custom logic to run when parent clicks "Next"
-  const onNext = () => {
-    try {
-      console.log("Custom next logic from SignUp_Profile");
-      // throw new Error("Not implement");
-    }
-    catch (err) {
-      console.log("Next error: ", err)
+  function isSignUpFormValid(form) {
+    return Object.values(form).every(value => value !== null && value !== '');
+  }
+
+  const onNext = async () => {
+    if (signUpForm.password !== confirmPassword) {
+      toast.error("Mật khẩu và xác nhận mật khẩu không khớp.");
       return false;
     }
-    return true;
-  };
 
+    // Clone local để giữ giá trị cập nhật
+    const updatedForm = {
+      ...signUpForm,
+      phone: '0' + phoneNumber.nationalNumber,
+    };
+
+    if (!isSignUpFormValid(updatedForm)) {
+      toast.error("Bạn cần điền đầy đủ thông tin!");
+      return false;
+    }
+
+    try {
+      const result = await PublicAPI.signUp(updatedForm);
+      return !!result;
+    } catch (err) {
+      if (!axios.isAxiosError(err)) {
+        toast.warning(err.message);
+        console.error(err);
+      }
+      return false;
+    }
+  };
   // Expose `onNext` to parent via ref
   useImperativeHandle(ref, () => ({
     onNext
@@ -105,17 +110,21 @@ const SignUp_Profile = forwardRef((props, ref) => {
           Create User <span style={{ color: RED_700, fontWeight: 'bold' }}>Profile</span>
         </Typography>
 
-        <FormTextField valueName={'citizenID'} value={form.citizenID} onChange={handleChange} />
+        <FormTextField valueName={'citizenID'} value={signUpForm.citizenID} onChange={handleChange} />
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <FormTextField width='270px' valueName={'firstName'} value={form.firstName} onChange={handleChange} />
-          <FormTextField width='270px' valueName={'lastName'} value={form.lastName} onChange={handleChange} />
+          <FormTextField width='270px' valueName={'firstName'} value={signUpForm.firstName} onChange={handleChange} />
+          <FormTextField width='270px' valueName={'lastName'} value={signUpForm.lastName} onChange={handleChange} />
         </Box>
 
-        <FormTextField valueName={'email'} value={form.email} onChange={handleChange} />
+        <FormTextField valueName={'email'} value={signUpForm.email} onChange={handleChange} />
+        <FormTextField valueName={'password'} value={signUpForm.password} onChange={handleChange} type='password' />
+
+        <FormTextField valueName={'confirmPassword'} value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value) }} type='password' />
+
 
         <Box sx={{ display: 'flex', gap: '1rem' }}>
-          <FormSelector width='150px' valueName={'gender'} value={form.gender} onChange={handleChange} selectors={genderSelectors} />
+          <FormSelector width='150px' valueName={'gender'} value={signUpForm.gender} onChange={handleChange} selectors={genderSelectors} />
 
           {/* Phone Number */}
           <Box sx={{ paddingTop: '20px', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
@@ -124,7 +133,7 @@ const SignUp_Profile = forwardRef((props, ref) => {
               <span style={{ color: 'orange' }}> *</span>
             </Typography>
             <MuiTelInput forceCallingCode defaultCountry="VN" onlyCountries={['VN']} disableDropdown
-              value={form.phone.nationalNumber} onChange={handlePhoneChange}
+              value={phoneNumber.nationalNumber} onChange={handlePhoneChange}
               sx={{
                 width: '400px',
                 marginTop: '10px',
@@ -150,25 +159,25 @@ const SignUp_Profile = forwardRef((props, ref) => {
             position: 'absolute',
             top: '-12px',
             left: 16,
-            backgroundColor: 'white', // Match your form background
+            backgroundColor: 'white', // Match your signUpForm background
             px: 1,
             fontSize: 14,
             color: 'text.secondary',
           }}>
             Address
           </Box>
-          <FormSelector valueName="city" value={form.city} onChange={handleChange} selectors={provinceOptions} />
+          <FormSelector valueName="city" value={signUpForm.city} onChange={handleChange} selectors={provinceOptions} />
 
           <Box sx={{ display: 'flex', gap: '1rem' }}>
-            <FormSelector width='270px' valueName="district" value={form.district} onChange={handleChange} selectors={districtOptions}
-              disabled={form.city === null || form.city === ''}
+            <FormSelector width='270px' valueName="district" value={signUpForm.district} onChange={handleChange} selectors={districtOptions}
+              disabled={signUpForm.city === null || signUpForm.city === ''}
             />
-            <FormSelector width='270px' valueName="ward" value={form.ward} onChange={handleChange} selectors={wardOptions}
-              disabled={form.district === null || form.district === ''}
+            <FormSelector width='270px' valueName="ward" value={signUpForm.ward} onChange={handleChange} selectors={wardOptions}
+              disabled={signUpForm.district === null || signUpForm.district === ''}
             />
           </Box>
-          <FormTextField valueName="houseNumber" value={form.houseNumber} onChange={handleChange}
-            disabled={form.ward === null || form.ward === ''}
+          <FormTextField valueName="houseNumber" value={signUpForm.houseNumber} onChange={handleChange}
+            disabled={signUpForm.ward === null || signUpForm.ward === ''}
           />
 
         </Box>

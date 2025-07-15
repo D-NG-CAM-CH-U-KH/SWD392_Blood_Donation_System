@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Box, Button, Typography } from '@mui/material';
 import UploadIcon from '@mui/icons-material/CloudUpload';
@@ -6,15 +6,13 @@ import { BLUE_NORMAL, RED_700 } from '~/theme';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import ClearIcon from '@mui/icons-material/Clear';
 
-const UploadBox = () => {
-    const [file, setFile] = useState(null);
+const UploadBox = ({ file, setFile }) => {
     const [previewUrl, setPreviewUrl] = useState(null);
 
     const handleFile = (file) => {
         setFile(file);
         setPreviewUrl(URL.createObjectURL(file));
     };
-
     const onDrop = useCallback((acceptedFiles) => {
         if (acceptedFiles.length > 0) {
             handleFile(acceptedFiles[0]);
@@ -36,6 +34,18 @@ const UploadBox = () => {
             }
         }
     };
+
+    useEffect(() => {
+        if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            setPreviewUrl(objectUrl);
+
+            // Clean up the object URL when component unmounts or file changes
+            return () => URL.revokeObjectURL(objectUrl);
+        } else {
+            setPreviewUrl(null);
+        }
+    }, [file]);
 
     return (
         <Box

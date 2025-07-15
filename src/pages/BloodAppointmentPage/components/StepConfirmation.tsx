@@ -7,10 +7,11 @@ import {
     selectedDate: string;
     selectedTimeSlot: string;
     note: string;
+    location: string;
   }
   
   const StepConfirmation: React.FC<StepConfirmationProps> = ({
-    selectedDate, selectedTimeSlot, note
+    selectedDate, selectedTimeSlot, note, location
   }) => (
     <Box textAlign="center">
       <CheckCircle sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
@@ -23,13 +24,17 @@ import {
             Thông tin lịch hẹn
           </Typography>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Typography><strong>Ngày:</strong></Typography>
               <Typography>{selectedDate ? new Date(selectedDate).toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''}</Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Typography><strong>Thời gian:</strong></Typography>
               <Typography>{selectedTimeSlot}</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography><strong>Địa điểm:</strong></Typography>
+              <Typography>{location}</Typography>
             </Grid>
           </Grid>
         </CardContent>

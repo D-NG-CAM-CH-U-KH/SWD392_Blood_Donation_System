@@ -9,7 +9,7 @@ import { SignUpIconStepIcon } from './SignUpIcon'
 import SignUp_Profile from './SignUp_Profile';
 import { BLACK_COLOR, BLUE_700 } from '~/theme';
 import SignUp_UploadCitizenId from './SignUp_UploadCitizenId';
-
+import SignUp_Verifying from './SignUp_Verifying';
 
 
 const SignUpPageComponent = () => {
@@ -17,28 +17,44 @@ const SignUpPageComponent = () => {
   const [skipped, setSkipped] = React.useState(new Set());
   const profileRef = React.useRef();
 
+  const [signUpForm, setSignUpForm] = React.useState ({
+    frontCardFile: null,
+    backCardFile: null,
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    citizenID: '',
+    phone: '',
+    gender: 1,
+    city: '',
+    district: '',
+    ward: '',
+    houseNumber: '',
+  });
+
   const steps = [
-    { label: 'ID documents', page: <SignUp_UploadCitizenId ref={profileRef}/> },
-    { label: 'User Profile', page: <SignUp_Profile ref={profileRef} /> },
-    { label: 'Verifying', page: <><Typography>Verifying...</Typography></> },
+    { label: 'ID documents', page: <SignUp_UploadCitizenId ref={profileRef} signUpForm={signUpForm} setSignUpForm={setSignUpForm} /> },
+    { label: 'User Profile', page: <SignUp_Profile ref={profileRef} signUpForm={signUpForm} setSignUpForm={setSignUpForm} /> },
+    { label: 'Verifying', page: <SignUp_Verifying /> },
   ];
 
   const isStepOptional = (step) => {
-    return step === 0;
+    return step === -1;
   };
 
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
 
-    const result = profileRef.current?.onNext?.(); // Call child function
+    const result = await profileRef.current?.onNext?.(); // Call child function
     if (result === false) {
       console.log('Validation failed. Do not proceed.');
       return;
@@ -54,14 +70,12 @@ const SignUpPageComponent = () => {
 
   const handleSkip = () => {
     if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
       throw new Error("You can't skip a step that isn't optional.");
     }
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
+      const newSkipped = new Set(prevSkippedf.values());
       newSkipped.add(activeStep);
       return newSkipped;
     });
@@ -69,6 +83,14 @@ const SignUpPageComponent = () => {
 
   const handleReset = () => {
     setActiveStep(0);
+  };
+
+  const handleSubmit = (e) => {
+    const { name, value } = e.target;
+    setSignUpForm(prev => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
