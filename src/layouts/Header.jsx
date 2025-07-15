@@ -52,22 +52,22 @@ function Header() {
             }}
           >
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
-            onClick={() => navigate(PageEndpoints.PublicEndpoints.HOME_ENDPOINT)}>
+              onClick={() => navigate(PageEndpoints.PublicEndpoints.HOME_ENDPOINT)}>
               Home
             </Button>
-            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
+            {/* <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
               Blogs
             </Button>
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
             onClick={() => navigate('blood-donor/lookup')}>
               Lookup
-            </Button>
+            </Button> */}
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
-            onClick={() => navigate('/blood-donation/create')}>
+              onClick={() => navigate('/blood-donation/create')}>
               Blood Appointment
             </Button>
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
-            onClick={() => navigate(PageEndpoints.PublicEndpoints.LOGIN_ENDPOINT)}>
+              onClick={() => navigate(PageEndpoints.PublicEndpoints.LOGIN_ENDPOINT)}>
               Login
             </Button>
           </Box>
