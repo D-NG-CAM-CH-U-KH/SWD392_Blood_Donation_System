@@ -50,14 +50,20 @@ function Header() {
               Blood Donation Center
             </Typography>
           </Box>
-
-          <Box sx={{ display: 'flex', gap: 5 }}>
-            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }} onClick={() => navigate(PageEndpoints.PublicEndpoints.HOME_ENDPOINT)}>
+          {/* Nav buttons bên phải */}
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 5,
+            }}
+          >
+            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
+              onClick={() => navigate(PageEndpoints.PublicEndpoints.HOME_ENDPOINT)}>
               Home
             </Button>
-            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
-              Blogs
-            </Button>
+//             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
+//               Blogs
+//             </Button>
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }} onClick={() => navigate('blood-donor/lookup')}>
               Lookup
             </Button>
@@ -85,7 +91,8 @@ function Header() {
               </Menu>
             </Box>
 
-            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }} onClick={() => navigate(PageEndpoints.PublicEndpoints.LOGIN_ENDPOINT)}>
+            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
+              onClick={() => navigate(PageEndpoints.PublicEndpoints.LOGIN_ENDPOINT)}>
               Login
             </Button>
           </Box>

@@ -14,8 +14,10 @@ import ProfileCard from '~/pages/ProfilePage/ProfileCard'
 import CreateBloodRequest from '~/pages/BloodRequestPage/BloodRequest.jsx';
 import BloodAppointment from "~/pages/BloodAppointmentPage/CreateBloodAppointment/BloodAppointment.component";
 import BloodDonationAppointmentList from '~/pages/BloodAppointmentPage/ViewBloodAppointmentHistory/BloodAppointmentHistory.component'
+import Index from '~/pages/StaffManagement/Index'
 import BloodDonorLookup from '~/pages/BloodDonorLookupPage/BloodDonorLookupPage.component'
 import BloodDonorLookupLayout from '~/layouts/BloodDonorLookupLayout/blood-donor-lookup.layout'
+
 
 
 const RouteComponent = () => {
@@ -40,10 +42,14 @@ const RouteComponent = () => {
       <Route element={<BloodAppointmentHistoryLayout/>}>
         <Route path="/blood-donation/view-all" element={<BloodDonationAppointmentList />} />
       </Route>
-      
+
       {/* Route for BloodDonorSearchLookup */}
       <Route element={<BloodDonorLookupLayout />}>
         <Route path="/blood-donor/lookup" element={<BloodDonorLookup />} />
+      </Route>
+
+      <Route element={<Index />}>
+        <Route path="/staff" element={<Index />} />
       </Route>
 
       {PublicRoutesComponent()}
