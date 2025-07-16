@@ -62,4 +62,17 @@ export default class PublicAPI {
         );
         return axiosResponse.data;
     }
+
+    static async getDonationAppointmentsByUserId(userId: number) {
+        const token = localStorage.getItem('token');
+        const axiosResponse = await api.get(
+            `https://localhost:5000/api/v1/donation-appointment/${userId}`,
+            token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+        );
+
+        const jsonString = JSON.stringify(axiosResponse.data, null, 2);
+        console.log("Response JSON:\n", jsonString);
+
+        return axiosResponse.data.data;
+    }
 }

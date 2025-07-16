@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Paper, Container, ThemeProvider, createTheme } from '@mui/material';
+import { Box, Paper, Container, ThemeProvider, createTheme, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, CircularProgress } from '@mui/material';
 import { Person, Favorite, CalendarToday, CheckCircle } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 import FormHeader from './components/FormHeader';
 import StepperHeader from './components/StepperHeader';
@@ -9,8 +10,8 @@ import StepHealthCheck from './components/StepHealthCheck';
 import StepAppointment from './components/StepAppointment';
 import StepConfirmation from './components/StepConfirmation';
 import NavigationButtons from './components/NavigationButtons';
-import PublicAPI from '../../api/public-api';
-import { DonationAppointmentDTO } from '../../dtos/request/BloodAppointment/blood-appointment-request.dto';
+import PublicAPI from '../../../api/public-api';
+import { DonationAppointmentDTO } from '../../../dtos/request/BloodAppointment/blood-appointment-request.dto';
 
 export interface DonationFormData {
   userID: number;
@@ -87,6 +88,8 @@ const BloodAppointment: React.FC = () => {
     womanProblemOther: ''
   });
   const [loading, setLoading] = useState(false);
+  const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleCheckboxChange = (questionKey: string, option: string, checked: boolean) => {
     setFormData(prev => {
@@ -165,7 +168,7 @@ const BloodAppointment: React.FC = () => {
       };
       console.log('JSON gửi BE:', JSON.stringify(dto, null, 2));
       await PublicAPI.createDonationAppointment(dto);
-      alert('Đăng ký hiến máu thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
+      setSuccessDialogOpen(true);
       setCurrentStep(0);
       setSelectedDate('');
       setSelectedTimeSlot('');
@@ -250,28 +253,80 @@ const BloodAppointment: React.FC = () => {
   };
 
   return (
-<ThemeProvider theme={theme}>
-      <Box sx={{ bgcolor: 'linear-gradient(135deg, #fef2f2 0%, #fdf2f8 100%)', minHeight: '100vh', py: 0 , width: '100%'}}>
-        <Box sx={{ display: 'flex', minHeight: 'calc(100vh - 85px)' }}>
-          <Box sx={{ flex: 1, py: 4 }}>
-            <Container maxWidth="md">
-              <Paper elevation={3} sx={{ p: 4, borderRadius: 3 }}>
-                <FormHeader />
-                <StepperHeader steps={steps} stepIcons={stepIcons} currentStep={currentStep} />
-                <Box sx={{ minHeight: 400 }}>
-                  {renderStepContent()}
-                </Box>
-                <NavigationButtons
-                  currentStep={currentStep}
-                  stepsLength={steps.length}
-                  handleBack={handleBack}
-                  handleNext={handleNext}
-                  handleSubmit={handleSubmit}
-                />
-              </Paper>
-            </Container>
-          </Box>
-        </Box>
+    <ThemeProvider theme={theme}>
+      <Box sx={{
+        bgcolor: 'linear-gradient(135deg, #fef2f2 0%, #fdf2f8 100%)',
+        minHeight: '100vh',
+        py: { xs: 2, md: 4 },
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Container maxWidth="md" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Paper elevation={6} sx={{
+            p: { xs: 2, sm: 4 },
+            borderRadius: 4,
+            width: '100%',
+            maxWidth: 700,
+            mx: 'auto',
+            boxShadow: '0 8px 32px 0 rgba(239,68,68,0.12)',
+            background: 'rgba(255,255,255,0.98)',
+          }}>
+            <Box sx={{ mb: 3, textAlign: 'center' }}>
+              <FormHeader />
+            </Box>
+            <StepperHeader steps={steps} stepIcons={stepIcons} currentStep={currentStep} />
+            <Box sx={{ minHeight: 420, py: 2, px: { xs: 0, sm: 2 } }}>
+              {renderStepContent()}
+            </Box>
+            <Box sx={{ mt: 3 }}>
+              <NavigationButtons
+                currentStep={currentStep}
+                stepsLength={steps.length}
+                handleBack={handleBack}
+                handleNext={handleNext}
+                handleSubmit={handleSubmit}
+              />
+            </Box>
+            {loading && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <CircularProgress color="primary" />
+              </Box>
+            )}
+          </Paper>
+        </Container>
+        <Dialog open={successDialogOpen} onClose={() => setSuccessDialogOpen(false)} maxWidth="xs" fullWidth>
+          <DialogTitle sx={{ textAlign: 'center', pb: 0 }}>
+            <CheckCircle sx={{ color: 'success.main', fontSize: 56, mb: 1 }} />
+            <Typography variant="h5" fontWeight={700} mt={1}>
+              Đăng ký thành công!
+            </Typography>
+          </DialogTitle>
+          <DialogContent sx={{ textAlign: 'center', pt: 1, pb: 2 }}>
+            <Typography variant="body1" color="text.secondary" mb={1}>
+              Bạn đã đăng ký hiến máu thành công.<br />Chúng tôi sẽ liên hệ với bạn sớm nhất.
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{ justifyContent: 'center', pb: 2, gap: 2 }}>
+            <Button
+              onClick={() => { setSuccessDialogOpen(false); navigate('/home'); }}
+              variant="outlined"
+              color="primary"
+              sx={{ minWidth: 140 }}
+            >
+              Về trang chủ
+            </Button>
+            <Button
+              onClick={() => { setSuccessDialogOpen(false); navigate('/blood-donation/view-all'); }}
+              variant="contained"
+              color="primary"
+              sx={{ minWidth: 180 }}
+            >
+              Xem lịch sử hiến máu
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </ThemeProvider>
   );
