@@ -17,7 +17,8 @@ import BloodDonationAppointmentList from '~/pages/BloodAppointmentPage/ViewBlood
 import Index from '~/pages/StaffManagement/Index'
 import BloodDonorLookup from '~/pages/BloodDonorLookupPage/BloodDonorLookupPage.component'
 import BloodDonorLookupLayout from '~/layouts/BloodDonorLookupLayout/blood-donor-lookup.layout'
-
+import PrivateRoutesComponent from './private.routes';
+import ForbiddenPage from '~/layouts/ForbiddenPage';
 
 
 const RouteComponent = () => {
@@ -31,13 +32,9 @@ const RouteComponent = () => {
         <Route path="/profile" element={<ProfileCard />} />
       </Route>
 
-      {/* Route for CreateBloodRequest */}
       <Route path="/request/create" element={<CreateBloodRequest />} />
 
-      {/* Route for BloodAppointment */}
-      <Route element={<BloodAppointmentLayout />}>
-        <Route path="/blood-donation/create" element={<BloodAppointment />} />
-      </Route>
+      <Route path={PageEndpoints.ErrorEndpoints.PERMISSION_DENIED_ENDPOINT} element={<ForbiddenPage />} />
 
       <Route element={<BloodAppointmentHistoryLayout/>}>
         <Route path="/blood-donation/view-all" element={<BloodDonationAppointmentList />} />
@@ -53,8 +50,9 @@ const RouteComponent = () => {
       </Route>
 
       {PublicRoutesComponent()}
+      {PrivateRoutesComponent()}
     </Routes>
-  )
-}
+  );
+};
 
-export default RouteComponent
+export default RouteComponent;

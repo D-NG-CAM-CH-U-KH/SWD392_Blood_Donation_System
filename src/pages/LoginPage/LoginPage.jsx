@@ -11,16 +11,20 @@ import { toast } from 'react-toastify'
 import PageEndpoints from '~/meta-data/contants/page-endpoints'
 import axios from 'axios'
 import AppTextField from '~/components/TextField'
+import { useAuth } from '~/hooks/useAuth'
+import { logIn } from '~/auth/reducer'
+import PrivateAPI from '~/api/private-api'
 
 function LoginPage() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { dispatch } = useAuth();
 
   const [citizenID, setCitizenID] = useState('');
   const [password, setPassword] = useState('')
   const [loginMess, setLoginMess] = useState('')
 
   useEffect(() => {
-    const isLoginned = localStorage.getItem('token') != null
+    const isLoginned = localStorage.getItem('ACCESS_TOKEN') != null
     if (isLoginned)
       window.location.href = PageEndpoints.PublicEndpoints.HOME_ENDPOINT;
   }, [])
@@ -34,6 +38,8 @@ function LoginPage() {
 
     try {
       await PublicAPI.login(citizenID, password, RoleEnum.Member.toString());
+      const user = await PrivateAPI.getUserByToken();
+      dispatch(logIn({ user }))
       navigate(PageEndpoints.PublicEndpoints.HOME_ENDPOINT);
     } catch (err) {
       if (!axios.isAxiosError(err)) {

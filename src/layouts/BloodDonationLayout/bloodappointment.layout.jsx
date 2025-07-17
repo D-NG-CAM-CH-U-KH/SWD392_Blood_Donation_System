@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 import Header from '../Header';
 import Footer from '../Footer';
 import { BG_COLOR } from '~/theme';
+import { Outlet } from 'react-router-dom';
 import BloodAppointment from '../../pages/BloodAppointmentPage/CreateBloodAppointment/BloodAppointment.component';
 
 const BloodAppointmentLayout = () => {
@@ -20,6 +21,7 @@ const BloodAppointmentLayout = () => {
         <BloodAppointment />
       </Box>
       <Footer />
+      <Outlet />
     </Grid>
   );
 };
