@@ -34,20 +34,20 @@ const RouteComponent = () => {
 
       <Route path="/request/create" element={<CreateBloodRequest />} />
 
-      <Route path={PageEndpoints.ErrorEndpoints.PERMISSION_DENIED_ENDPOINT} element={<ForbiddenPage />} />
-
-      <Route element={<BloodAppointmentHistoryLayout/>}>
-        <Route path="/blood-donation/view-all" element={<BloodDonationAppointmentList />} />
+      {/* Route for BloodAppointment */}
+      <Route element={<DefaultLayout />}>
+        <Route path="/blood-donation/create" element={<BloodAppointment />} />
       </Route>
 
-      {/* Route for BloodDonorSearchLookup */}
-      <Route element={<BloodDonorLookupLayout />}>
-        <Route path="/blood-donor/lookup" element={<BloodDonorLookup />} />
+      <Route element={<BloodAppointmentHistoryLayout />}>
+        <Route path="/blood-donation/view-all" element={<BloodDonationAppointmentList />} />
       </Route>
 
       <Route element={<Index />}>
         <Route path="/staff" element={<Index />} />
       </Route>
+
+      <Route path={PageEndpoints.ErrorEndpoints.PERMISSION_DENIED_ENDPOINT} element={<ForbiddenPage />} />
 
       {PublicRoutesComponent()}
       {PrivateRoutesComponent()}

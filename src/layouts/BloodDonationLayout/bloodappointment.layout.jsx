@@ -9,19 +9,19 @@ import BloodAppointment from '../../pages/BloodAppointmentPage/CreateBloodAppoin
 const BloodAppointmentLayout = () => {
   return (
     <Grid
-    container
-    spacing={0}
-    direction="column"
-    alignItems="center"
-    justify="center"
-    sx={{ m: 0, p: 0, bgcolor: BG_COLOR }}
->
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justify="center"
+      sx={{ m: 0, p: 0, bgcolor: BG_COLOR }}
+    >
       <Header />
       <Box sx={{ flex: 1, py: 0 }}>
-        <BloodAppointment />
       </Box>
-      <Footer />
       <Outlet />
+      <Footer />
+
     </Grid>
   );
 };
