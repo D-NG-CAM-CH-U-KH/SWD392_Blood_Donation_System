@@ -1,12 +1,10 @@
-import React from 'react';
 import { Box, Grid } from '@mui/material';
 import Header from '../Header';
 import Footer from '../Footer';
 import { BG_COLOR } from '~/theme';
-import { Outlet } from 'react-router-dom';
-import BloodAppointment from '../../pages/BloodAppointmentPage/CreateBloodAppointment/BloodAppointment.component';
+import BloodDonationDashboard from '../../pages/BloodAppointmentPage/ViewBloodAppointmentHistory/BloodAppointmentHistory.component';
 
-const BloodAppointmentLayout = () => {
+const BloodAppointmentHistoryLayout = () => {
   return (
     <Grid
     container
@@ -18,12 +16,11 @@ const BloodAppointmentLayout = () => {
 >
       <Header />
       <Box sx={{ flex: 1, py: 0 }}>
-        <BloodAppointment />
+        <BloodDonationDashboard />
       </Box>
       <Footer />
-      <Outlet />
     </Grid>
   );
 };
 
-export default BloodAppointmentLayout;
+export default BloodAppointmentHistoryLayout;
