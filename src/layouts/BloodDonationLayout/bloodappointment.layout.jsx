@@ -4,6 +4,7 @@ import Header from '../Header';
 import Footer from '../Footer';
 import { BG_COLOR } from '~/theme';
 import BloodAppointment from '../../pages/BloodAppointmentPage/BloodAppointment.component';
+import { Outlet } from 'react-router-dom';
 
 const BloodAppointmentLayout = () => {
   return (
@@ -20,6 +21,7 @@ const BloodAppointmentLayout = () => {
         <BloodAppointment />
       </Box>
       <Footer />
+      <Outlet />
     </Grid>
   );
 };

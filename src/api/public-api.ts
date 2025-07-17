@@ -15,11 +15,11 @@ export default class PublicAPI {
         const data = response.data;
 
         if (availableRole && data.roles.includes(availableRole)) {
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('ACCESS_TOKEN', data.token);
         }
         else throw new Error('Role is not valid!');
 
-        return response;
+        return response.data;
     }
 
     static async signUp(signUpForm: CreateUserDto) {
