@@ -20,4 +20,10 @@ export default class ApiEndPoints {
 
     static readonly CREATE_ACCOUNT_WITH_CITIZEN_CARD_ENDPOINT = `${this.ACCOUNT_ENDPOINT}/create-with-citizen-card`;
   };
+
+  static readonly CertificateEndpoints = class {
+    static readonly CERTIFICATE_ENDPOINT = `${ApiEndPoints.API_ENDPOINT}/certificate`;
+    static readonly CERTIFICATE_WITH_IMAGE_ENDPOINT = `${this.CERTIFICATE_ENDPOINT}/create-with-image`;
+
+  };
 }
