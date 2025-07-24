@@ -36,7 +36,7 @@ const RouteComponent = () => {
 
       {/* Route for BloodAppointment */}
       <Route element={<DefaultLayout />}>
-        <Route path="/blood-donation/create" element={<BloodAppointment />} />
+        <Route path={PageEndpoints.PrivateEndpoints.CREATE_BLOOD_DONATION} element={<BloodAppointment />} />
       </Route>
 
       <Route element={<BloodAppointmentHistoryLayout />}>

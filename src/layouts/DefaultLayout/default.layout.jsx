@@ -1,29 +1,39 @@
-import { Container, Grid } from '@mui/material'
+import { Box, Container } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 import { BG_COLOR } from '~/theme'
-import Footer from '~/layouts/Footer.jsx'
-import Header from '~/layouts/Header.jsx'
+import Footer from '~/layouts/Footer'
+import Header from '~/layouts/Header'
 
 const DefaultLayout = () => {
-    return (
-        <Grid
-            container
-            spacing={0}
-            direction="column"
-            alignItems="center"
-            justify="center"
-            sx={{ m: 0, p: 0, bgcolor: BG_COLOR }}
-        >
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        bgcolor: BG_COLOR,
+      }}
+    >
+      {/* HEADER */}
+      <Header />
 
-            <Container maxWidth={'xl'}>
-                {/* HEADER */}
-                <Header />
-                <Outlet />
-                {/* FOOTER */}
-                <Footer />
-            </Container>
-        </Grid>
-    )
+      {/* MAIN CONTENT */}
+      <Box
+        component="main"
+        sx={{
+          flex: 1,
+          pt: 4, // top padding for content
+        }}
+      >
+        <Container maxWidth="xl">
+          <Outlet />
+        </Container>
+      </Box>
+
+      {/* FOOTER */}
+      <Footer />
+    </Box>
+  )
 }
 
 export default DefaultLayout

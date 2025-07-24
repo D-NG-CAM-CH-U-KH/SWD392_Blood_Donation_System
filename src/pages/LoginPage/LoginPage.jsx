@@ -23,12 +23,6 @@ function LoginPage() {
   const [password, setPassword] = useState('')
   const [loginMess, setLoginMess] = useState('')
 
-  useEffect(() => {
-    const isLoginned = localStorage.getItem('ACCESS_TOKEN') != null
-    if (isLoginned)
-      window.location.href = PageEndpoints.PublicEndpoints.HOME_ENDPOINT;
-  }, [])
-
   const handleLogin = async () => {
     setLoginMess('')
     if (!citizenID || !password) {

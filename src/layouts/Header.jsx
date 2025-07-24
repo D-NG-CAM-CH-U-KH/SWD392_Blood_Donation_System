@@ -17,10 +17,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 function Header() {
   const navigate = useNavigate()
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [bloodTypeAnchorEl, setBloodTypeAnchorEl] = useState(null)
+  const [appointmentAnchorEl, setAppointmentAnchorEl] = useState(null)
 
   const handleMenuClose = () => {
-    setAnchorEl(null)
+    setBloodTypeAnchorEl(null)
+    setAppointmentAnchorEl(null)
   }
 
   const handleNavigate = (path) => {
@@ -61,16 +63,41 @@ function Header() {
               onClick={() => navigate(PageEndpoints.PublicEndpoints.HOME_ENDPOINT)}>
               Home
             </Button>
-//             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
-//               Blogs
-//             </Button>
+            {/*             
+            <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
+              Blogs
+             </Button> 
+             */}
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }} onClick={() => navigate('blood-donor/lookup')}>
               Lookup
             </Button>
 
+            <Box
+              onMouseEnter={(e) => setBloodTypeAnchorEl(e.currentTarget)}
+              onMouseLeave={handleMenuClose}
+              sx={{ display: 'inline-block' }}
+            >
+              <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}>
+                Your Blood Type
+                <ExpandMoreIcon fontSize="small" sx={{ ml: 0.5, color: GREY_LIGHT }} />
+              </Button>
+              <Menu
+                anchorEl={bloodTypeAnchorEl}
+                open={Boolean(bloodTypeAnchorEl)}
+                onClose={handleMenuClose}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+                MenuListProps={{ onMouseLeave: handleMenuClose }}
+              >
+                <MenuItem onClick={() => handleNavigate(PageEndpoints.PrivateEndpoints.GET_BLOOD_TYPE)}>Get blood type</MenuItem>
+                <MenuItem onClick={() => handleNavigate('/submit-certificate')}>Submit certificate</MenuItem>
+              </Menu>
+            </Box>
+
+
             {/* Blood Appointment dropdown on hover */}
             <Box
-              onMouseEnter={(e) => setAnchorEl(e.currentTarget)}
+              onMouseEnter={(e) => setAppointmentAnchorEl(e.currentTarget)}
               onMouseLeave={handleMenuClose}
               sx={{ display: 'inline-block' }}
             >
@@ -79,17 +106,18 @@ function Header() {
                 <ExpandMoreIcon fontSize="small" sx={{ ml: 0.5, color: GREY_LIGHT }} />
               </Button>
               <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
+                anchorEl={appointmentAnchorEl}
+                open={Boolean(appointmentAnchorEl)}
                 onClose={handleMenuClose}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
                 transformOrigin={{ vertical: 'top', horizontal: 'left' }}
                 MenuListProps={{ onMouseLeave: handleMenuClose }}
               >
-                <MenuItem sx={{ fontFamily:'Poppins, Roboto, Arial, sans-serif', fontSize: "14px", fontWeight: "600", color: "#4B4B4B"}} onClick={() => handleNavigate('/blood-donation/create')}>Create Appointment</MenuItem>
-                <MenuItem sx={{ fontFamily:'Poppins, Roboto, Arial, sans-serif', fontSize: "14px", fontWeight: "600", color: "#4B4B4B"}} onClick={() => handleNavigate('/blood-donation/view-all')}>View Appointments</MenuItem>
+                <MenuItem onClick={() => handleNavigate('/blood-donation/create')}>Create Appointment</MenuItem>
+                <MenuItem onClick={() => handleNavigate('/blood-donation/view-all')}>View Appointments</MenuItem>
               </Menu>
             </Box>
+
 
             <Button disableRipple sx={{ py: '20px', fontWeight: 600, color: GREY_LIGHT }}
               onClick={() => navigate(PageEndpoints.PublicEndpoints.LOGIN_ENDPOINT)}>
