@@ -9,7 +9,7 @@ function ServiceComponents() {
     <div>
       <Box sx={{ display: 'flex', justifyContent: 'space-around', mt: 5 }}>
         <Box sx={{ display: 'flex', padding: 3, borderRadius: '16px', backgroundColor: RED_300, gap: 2 }}>
-          <img src='/src/assets/images/drop.png' style={{ width: 100, height: 100 }} />
+          <img src='/public/images/drop.png' style={{ width: 100, height: 100 }} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography sx={{ fontSize: 20, fontWeight: 400 }}>Make an appointment</Typography>
             <Box sx={{ width: '250px' }}>
@@ -33,7 +33,7 @@ function ServiceComponents() {
         </Box>
 
         <Box sx={{ display: 'flex', padding: 3, borderRadius: '16px', backgroundColor: RED_300, gap: 2 }}>
-          <img src='/src/assets/images/give.png' style={{ width: 100, height: 100 }} />
+          <img src='/public/images/give.png' style={{ width: 100, height: 100 }} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography sx={{ fontSize: 20, fontWeight: 400 }}>Learn about donating blood</Typography>
             <Box sx={{ width: '250px' }}>
@@ -57,7 +57,7 @@ function ServiceComponents() {
         </Box>
 
         <Box sx={{ display: 'flex', padding: 3, borderRadius: '16px', backgroundColor: RED_300, gap: 2 }}>
-          <img src='/src/assets/images/calendar.png' style={{ width: 100, height: 100 }} />
+          <img src='/public/images/calendar.png' style={{ width: 100, height: 100 }} />
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography sx={{ fontSize: 20, fontWeight: 400 }}>Are you eligible?</Typography>
             <Box sx={{ width: '250px' }}>
