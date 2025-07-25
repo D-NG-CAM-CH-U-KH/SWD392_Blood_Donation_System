@@ -9,7 +9,7 @@ export default class PrivateAPI {
     }
 
     static async getUserByToken(): Promise<GetUserResponseDTO> {
-        const axiosResposne = await api.get(ApiEndPoints.AccountEndpoints.GET_ACCOUNT_ENDPOINT);
+        const axiosResposne = await api.get("https://localhost:5000" + ApiEndPoints.AccountEndpoints.GET_ACCOUNT_ENDPOINT);
         const response: ResponseDto<GetUserResponseDTO> = axiosResposne.data;
         return response.data;
     }
@@ -48,7 +48,7 @@ export default class PrivateAPI {
           throw error;
         }
       }
-    }
+    
 
     static async createCertificateWithImage(formData: any): Promise<any> {
         const data = new FormData();

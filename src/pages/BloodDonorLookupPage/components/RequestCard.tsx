@@ -56,8 +56,8 @@ const BLOOD_GROUP_MAP: Record<number, string> = {
 };
 
 const STATUS_CONFIG = {
-  'Pending': { 
-    label: 'Đang chờ', 
+  'Confirmed': { 
+    label: 'Đang tìm kiếm', 
     color: '#1976d2', 
     bgColor: '#e3f2fd',
     icon: HourglassEmpty,
@@ -128,7 +128,7 @@ const RequestCard: React.FC<RequestCardProps> = ({
   const urgencyInfo = URGENCY_CONFIG[request.urgencyLevel as keyof typeof URGENCY_CONFIG] || URGENCY_CONFIG['normal'];
   const StatusIcon = statusInfo.icon;
   const UrgencyIcon = urgencyInfo.icon;
-  // const [openCreateRequestDialog, setOpenCreateRequestDialog] = useState(false);
+  const [openCreateRequestDialog, setOpenCreateRequestDialog] = useState(false);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('vi-VN', {
@@ -155,24 +155,28 @@ const RequestCard: React.FC<RequestCardProps> = ({
     setRegistrationDialog(true);
   };
 
-  // const handleCreateRequestSuccess = () => {
-  //   fetchBloodRequests();
-  //   setTabValue(1);
-  // };
-
-  const handleRegistrationSuccess = (matchingLog: any) => {
-    setRegistrationDialog(false);
-    setSnackbar({
-      open: true,
-      message: 'Đăng ký hiến máu thành công! Chúng tôi sẽ liên hệ với bạn sớm.',
-      severity: 'success'
-    });
-    
-    // Call parent callback if provided
-    if (onRegistrationSuccess) {
-      onRegistrationSuccess(matchingLog);
-    }
+  const handleCreateRequestSuccess = () => {
+    fetchBloodRequests();
+    setTabValue(1);
   };
+
+// Trong RequestCard.tsx
+const handleRegistrationSuccess = (result: boolean) => {
+  setRegistrationDialog(false);
+  setSnackbar({
+    open: true,
+    message: result 
+      ? 'Đăng ký hiến máu thành công! Chúng tôi sẽ liên hệ với bạn sớm.'
+      : 'Đăng ký không thành công. Vui lòng thử lại.',
+    severity: result ? 'success' : 'warning'
+  });
+  
+  // Call parent callback if provided
+  if (onRegistrationSuccess) {
+    onRegistrationSuccess(result);
+  }
+};
+
 
   const handleRegistrationError = (error: string) => {
     setSnackbar({
@@ -486,11 +490,11 @@ const RequestCard: React.FC<RequestCardProps> = ({
         </CardContent>
 
                 {/* CREATE BLOOD REQUEST DIALOG */}
-                {/* <CreateBloodRequestDialog 
+                <CreateBloodRequestDialog 
           open={openCreateRequestDialog}
           onClose={() => setOpenCreateRequestDialog(false)}
           onSuccess={handleCreateRequestSuccess}
-        /> */}
+        />
 
         {/* Action Section */}
         <CardActions sx={{ p: 3, pt: 0 }}>
@@ -531,7 +535,7 @@ const RequestCard: React.FC<RequestCardProps> = ({
             }}
           >
             {getButtonText()}
-          </Button>
+          </Button> 
         </CardActions>
 
         {/* Request ID Badge */}

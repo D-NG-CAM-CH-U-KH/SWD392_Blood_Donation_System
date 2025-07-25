@@ -270,7 +270,7 @@ const BloodAppointment: React.FC = () => {
       const dto: DonationAppointmentDTO = {
         // ✅ Sử dụng selectedDonationScheduleId thay vì donationScheduleID cũ
         donationScheduleID: selectedDonationScheduleId ?? 1,
-        status: 'pending',
+        status: 'Confirmed',
         location: location.trim(),
         note: note.trim(),
         scheduledDate: selectedDate,
