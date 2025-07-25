@@ -32,7 +32,7 @@ const RouteComponent = () => {
         <Route path="/profile" element={<ProfileCard />} />
       </Route>
 
-      <Route path="/request/create" element={<CreateBloodRequest />} />
+      <Route path="/blood-request/create" element={<CreateBloodRequest />} />
 
       {/* Route for BloodAppointment */}
       <Route element={<DefaultLayout />}>

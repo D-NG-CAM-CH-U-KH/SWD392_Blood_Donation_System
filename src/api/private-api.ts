@@ -14,6 +14,42 @@ export default class PrivateAPI {
         return response.data;
     }
 
+    static async checkDonorEligibility(userId: number, formData: any): Promise<any> {
+        try {
+          console.log(`Checking eligibility for user ${userId}:`, formData);
+          
+          const axiosResponse = await api.post(
+            `https://localhost:5000/api/v1/donor-eligibility/check/${userId}`,
+            formData,
+            {
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('ACCESS_TOKEN')}`,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+          
+          const response: ResponseDto<any> = axiosResponse.data;
+          
+          if (response.is_success) {
+            return response.data;
+          } else {
+            throw new Error(response.message || 'Eligibility check failed');
+          }
+        } catch (error: any) {
+          console.error('Error in checkDonorEligibility:', error);
+          
+          if (error.response?.status === 401) {
+            // Token expired, redirect to login
+            localStorage.removeItem('ACCESS_TOKEN');
+            window.location.href = '/login';
+          }
+          
+          throw error;
+        }
+      }
+    }
+
     static async createCertificateWithImage(formData: any): Promise<any> {
         const data = new FormData();
         data.append('ImageProof', formData.fileProof); // must be a File object
@@ -31,3 +67,4 @@ export default class PrivateAPI {
         return response.data;
     }
 }
+
