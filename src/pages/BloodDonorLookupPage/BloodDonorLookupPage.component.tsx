@@ -1,250 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box,
-  Container,
-  Typography,
-  Paper,
-  TextField,
-  Button,
-  Card,
-  CardContent,
-  CardActions,
-  Chip,
-  MenuItem,
-  Slider,
-  Avatar,
-  FormControl,
-  InputLabel,
-  Select,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Divider,
-  Switch,
-  FormControlLabel,
-  Collapse,
-  Tooltip,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Tab,
-  Tabs,
-  LinearProgress,
-  Snackbar,
-  Alert,
-  Badge,
-  ThemeProvider,
-  createTheme,
-  styled,
-  keyframes,
-  AlertColor,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableContainer
+  Box, Container, Typography, Paper, TextField, Button, Card, CardContent, CardActions,
+  Chip, MenuItem, Slider, Avatar, FormControl, InputLabel, Select, List, ListItem,
+  ListItemText, ListItemAvatar, Divider, Switch, FormControlLabel, Collapse, Tooltip,
+  IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Tab, Tabs, LinearProgress,
+  Snackbar, Alert, Badge, ThemeProvider, createTheme, styled, keyframes, AlertColor,
+  Table, TableHead, TableBody, TableRow, TableCell, TableContainer
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import {
-  FilterList,
-  LocationOn,
-  Phone,
-  Email,
-  BloodtypeRounded,
-  AccessTime,
-  PersonAdd,
-  Search,
-  Refresh,
-  FilterAlt,
-  Map,
-  FavoriteRounded,
-  InfoOutlined,
-  ExpandMore,
-  Close,
-  CheckCircle,
-  Warning,
-  EmergencyShare,
-  PauseCircle
+  FilterList, LocationOn, Phone, Email, BloodtypeRounded, AccessTime, PersonAdd,
+  Search, Refresh, FilterAlt, Map, FavoriteRounded, InfoOutlined, ExpandMore,
+  Close, CheckCircle, Warning, EmergencyShare, PauseCircle, AddCircleOutline
 } from '@mui/icons-material';
 import DonorCard from './components/DonorCard';
 import RequestCard from './components/RequestCard';
 import BloodCompatibilityGuide from './components/BloodCompatibilityGuide';
 import { StyledCard, StyledChip, BloodTypeChip, EmergencyCard } from './components/styled';
+import axios from 'axios';
+import CreateBloodRequestDialog from './components/CreateBloodRequestDialog';
 
-// Theme configuration
+// Theme configuration (giữ nguyên)
 const theme = createTheme({
   palette: {
-    primary: {
-      main: '#d32f2f',
-      light: '#ff6659',
-      dark: '#9a0007'
-    },
-    secondary: {
-      main: '#f44336',
-      light: '#ff7961',
-      dark: '#ba000d'
-    },
-    background: {
-      default: '#fafafa',
-      paper: '#ffffff'
-    }
+    primary: { main: '#d32f2f', light: '#ff6659', dark: '#9a0007' },
+    secondary: { main: '#f44336', light: '#ff7961', dark: '#ba000d' },
+    background: { default: '#fafafa', paper: '#ffffff' }
   },
   typography: {
-    h4: {
-      fontWeight: 600,
-      color: '#d32f2f'
-    },
-    h6: {
-      fontWeight: 500
-    }
+    h4: { fontWeight: 600, color: '#d32f2f' },
+    h6: { fontWeight: 500 }
   }
 });
 
-// Animation for emergency
+// Animation for emergency (giữ nguyên)
 const pulse = keyframes`
   0% { box-shadow: 0 0 0 0 rgba(211,47,47,0.7); }
   70% { box-shadow: 0 0 0 10px rgba(211,47,47,0); }
   100% { box-shadow: 0 0 0 0 rgba(211,47,47,0); }
 `;
-
-// Mock data
-const mockDonors = [
-  {
-    id: 1,
-    name: 'Nguyễn Văn A',
-    bloodType: 'O-',
-    phone: '0901234567',
-    email: 'nguyenvana@email.com',
-    location: 'Quận 1, TP.HCM',
-    distance: 2.5,
-    lastDonation: '2024-01-15',
-    nextAvailable: '2024-04-15',
-    donationCount: 15,
-    isAvailable: true,
-    isEmergency: false,
-    avatar: '/api/placeholder/50/50',
-    compatibility: ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'],
-    components: ['Hồng cầu', 'Huyết tương', 'Tiểu cầu']
-  },
-  {
-    id: 2,
-    name: 'Trần Thị B',
-    bloodType: 'A+',
-    phone: '0912345678',
-    email: 'tranthib@email.com',
-    location: 'Quận 3, TP.HCM',
-    distance: 1.8,
-    lastDonation: '2024-02-20',
-    nextAvailable: '2024-05-20',
-    donationCount: 8,
-    isAvailable: true,
-    isEmergency: true,
-    avatar: '/api/placeholder/50/50',
-    compatibility: ['A+', 'AB+'],
-    components: ['Hồng cầu', 'Huyết tương']
-  },
-  {
-    id: 3,
-    name: 'Lê Minh C',
-    bloodType: 'B-',
-    phone: '0923456789',
-    email: 'leminhc@email.com',
-    location: 'Quận 7, TP.HCM',
-    distance: 5.2,
-    lastDonation: '2024-03-10',
-    nextAvailable: '2024-06-10',
-    donationCount: 22,
-    isAvailable: false,
-    isEmergency: false,
-    avatar: '/api/placeholder/50/50',
-    compatibility: ['B-', 'B+', 'AB-', 'AB+'],
-    components: ['Hồng cầu', 'Tiểu cầu']
-  },
-  {
-    id: 4,
-    name: 'Phạm Thị D',
-    bloodType: 'B+',
-    phone: '0934567890',
-    email: 'phamthid@email.com',
-    location: 'Quận 5, TP.HCM',
-    distance: 3.1,
-    lastDonation: '2024-03-25',
-    nextAvailable: '2024-06-25',
-    donationCount: 10,
-    isAvailable: true,
-    isEmergency: false,
-    avatar: '/api/placeholder/50/50',
-    compatibility: ['B+', 'AB+'],
-    components: ['Hồng cầu', 'Huyết tương']
-  },
-  {
-    id: 5,
-    name: 'Đỗ Văn E',
-    bloodType: 'AB-',
-    phone: '0945678901',
-    email: 'dovane@email.com',
-    location: 'Quận 10, TP.HCM',
-    distance: 4.7,
-    lastDonation: '2024-01-30',
-    nextAvailable: '2024-04-30',
-    donationCount: 5,
-    isAvailable: false,
-    isEmergency: false,
-    avatar: '/api/placeholder/50/50',
-    compatibility: ['AB-', 'AB+'],
-    components: ['Tiểu cầu']
-  },
-  {
-    id: 6,
-    name: 'Lý Minh F',
-    bloodType: 'AB+',
-    phone: '0956789012',
-    email: 'lyminhf@email.com',
-    location: 'Quận Bình Thạnh, TP.HCM',
-    distance: 2.9,
-    lastDonation: '2024-02-10',
-    nextAvailable: '2024-05-10',
-    donationCount: 12,
-    isAvailable: true,
-    isEmergency: true,
-    avatar: '/api/placeholder/50/50',
-    compatibility: ['AB+'],
-    components: ['Hồng cầu', 'Huyết tương', 'Tiểu cầu']
-  }
-];
-
-const mockRequests = [
-  {
-    id: 1,
-    patientName: 'Nguyễn Văn X',
-    bloodType: 'O-',
-    hospital: 'Bệnh viện Chợ Rẫy',
-    urgency: 'Khẩn cấp',
-    needed: 3,
-    received: 1,
-    deadline: '2024-07-10',
-    contact: '0901111111',
-    components: ['Hồng cầu'],
-    status: 'active'
-  },
-  {
-    id: 2,
-    patientName: 'Trần Thị Y',
-    bloodType: 'A+',
-    hospital: 'Bệnh viện Bình Dân',
-    urgency: 'Bình thường',
-    needed: 2,
-    received: 2,
-    deadline: '2024-07-15',
-    contact: '0902222222',
-    components: ['Huyết tương'],
-    status: 'completed'
-  }
-];
 
 const bloodTypes = ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'];
 const bloodComponents = ['Hồng cầu', 'Huyết tương', 'Tiểu cầu'];
@@ -257,17 +51,24 @@ const BloodDonorLookup = () => {
   const [maxDistance, setMaxDistance] = useState(10);
   const [emergencyOnly, setEmergencyOnly] = useState(false);
   const [availableOnly, setAvailableOnly] = useState(true);
-  const [filteredDonors, setFilteredDonors] = useState(mockDonors);
-  const [filteredRequests, setFilteredRequests] = useState(mockRequests);
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedDonor, setSelectedDonor] = useState<DonorType | null>(null);
   const [loading, setLoading] = useState(false);
-  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: AlertColor }>({ open: false, message: '', severity: 'success' });
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: AlertColor }>({ 
+    open: false, message: '', severity: 'success' 
+  });
   const [showFilters, setShowFilters] = useState(false);
-  // 1. Thêm state cho nhóm máu của bạn
   const [myBloodType, setMyBloodType] = useState('A+');
   const [showCompatibilityGuide, setShowCompatibilityGuide] = useState(false);
   const compatibilityGuideRef = React.useRef<HTMLDivElement>(null);
+  
+  // CREATE BLOOD REQUEST STATES
+  const [openCreateRequestDialog, setOpenCreateRequestDialog] = useState(false);
+  const [bloodRequests, setBloodRequests] = useState<any[]>([]);
+  
+  // ✅ THÊM STATES CHO DONORS TỪ API
+  const [donors, setDonors] = useState<any[]>([]);
+  const [filteredDonors, setFilteredDonors] = useState<any[]>([]);
+  const [selectedDonor, setSelectedDonor] = useState<any>(null);
 
   const handleToggleCompatibilityGuide = () => {
     setShowCompatibilityGuide((prev) => {
@@ -281,11 +82,62 @@ const BloodDonorLookup = () => {
     });
   };
 
-  // Filter handlers
+  // ✅ FETCH DONORS TỪ API
+  const fetchDonors = async () => {
+    try {
+      const token = localStorage.getItem('ACCESS_TOKEN')?.replaceAll('"', '');
+      const response = await axios.get('https://localhost:5000/api/v1/account/account/all-with-appointments', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      console.log('📊 API Donors Response:', JSON.stringify(response.data, null, 2));
+
+      if (response.data?.is_success && response.data.data) {
+        const transformedDonors = response.data.data.map((user: any) => ({
+          id: user.userID,
+          userID: user.userID,
+          name: user.fullName || 'Chưa cập nhật',
+          fullName: user.fullName || 'Chưa cập nhật',
+          bloodType: user.bloodGroup || 'N/A',
+          bloodGroup: user.bloodGroup || 'N/A',
+          phone: user.phone || 'N/A',
+          email: user.email || 'N/A',
+          location: 'TP.HCM', // Default location
+          distance: Math.random() * 10 + 1, // Random distance for demo
+          lastDonation: user.lastDonationDate || null,
+          lastDonationDate: user.lastDonationDate || null,
+          donationCount: user.completedAppointmentsCount || 0,
+          completedAppointmentsCount: user.completedAppointmentsCount || 0,
+          totalVolumesDonated: user.totalVolumesDonated || 0,
+          isAvailable: user.isActive !== false,
+          isActive: user.isActive !== false,
+          isEmergency: false,
+          avatar: '/api/placeholder/50/50',
+          compatibility: ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'],
+          components: ['Hồng cầu', 'Huyết tương', 'Tiểu cầu'],
+          gender: user.gender,
+          dateOfBirth: user.dateOfBirth
+        }));
+        
+        setDonors(transformedDonors);
+        setFilteredDonors(transformedDonors);
+        console.log('✅ Donors loaded:', transformedDonors);
+      }
+    } catch (err: any) {
+      console.error('❌ Error fetching donors:', err);
+      setSnackbar({
+        open: true,
+        message: 'Không thể tải danh sách người hiến máu',
+        severity: 'error'
+      });
+    }
+  };
+
+  // Filter handlers (cập nhật để sử dụng donors từ API)
   const handleSearch = () => {
     setLoading(true);
     setTimeout(() => {
-      let filtered = mockDonors.filter(donor => {
+      let filtered = donors.filter(donor => {
         const matchesQuery = donor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            donor.location.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesBloodType = !selectedBloodType || donor.bloodType === selectedBloodType;
@@ -305,16 +157,14 @@ const BloodDonorLookup = () => {
   const handleReset = () => {
     setSearchQuery('');
     setSelectedBloodType('');
-    setSelectedComponent('');
+    setSelectedComponent('');  
     setMaxDistance(10);
     setEmergencyOnly(false);
     setAvailableOnly(true);
-    setFilteredDonors(mockDonors);
+    setFilteredDonors(donors);
   };
 
-  type DonorType = typeof mockDonors[number];
-  type RequestType = typeof mockRequests[number];
-  const handleContact = (donor: DonorType) => {
+  const handleContact = (donor: any) => {
     setSelectedDonor(donor);
     setOpenDialog(true);
   };
@@ -340,6 +190,34 @@ const BloodDonorLookup = () => {
       'AB+': { canDonate: ['AB+'], canReceive: ['O-', 'O+', 'A-', 'A+', 'B-', 'B+', 'AB-', 'AB+'] }
     };
     return compatibility[bloodType] || { canDonate: [], canReceive: [] };
+  };
+
+  // Fetch Blood Request từ BE (giữ nguyên)
+  const fetchBloodRequests = async () => {
+    try {
+      const res = await axios.get('https://localhost:5000/api/v1/blood-request');
+      if (res.data) {
+        console.log('JSON BloodRequest BE:', JSON.stringify(res.data, null, 2));
+      }
+      if (res.data?.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
+        setBloodRequests(res.data.data);
+      } else {
+        setBloodRequests([]);
+      }
+    } catch {
+      setBloodRequests([]);
+    }
+  };
+
+  // ✅ GỌI CẢ HAI API KHI COMPONENT MOUNT
+  useEffect(() => {
+    fetchBloodRequests();
+    fetchDonors();
+  }, []);
+
+  const handleCreateRequestSuccess = () => {
+    fetchBloodRequests();
+    setTabValue(1);
   };
 
   return (
@@ -374,9 +252,9 @@ const BloodDonorLookup = () => {
             </Button>
           </Box>
 
-        <Grid container spacing={2}>
+          <Grid container spacing={2}>
             <Box sx={{ width: '100%', display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-            <TextField
+              <TextField
                 fullWidth
                 label="Tìm kiếm theo tên hoặc địa điểm"
                 value={searchQuery}
@@ -391,9 +269,9 @@ const BloodDonorLookup = () => {
                   value={selectedBloodType}
                   onChange={(e) => setSelectedBloodType(e.target.value)}
                   label="Nhóm máu"
-              fullWidth
-            >
-              <MenuItem value="">Tất cả</MenuItem>
+                  fullWidth
+                >
+                  <MenuItem value="">Tất cả</MenuItem>
                   {bloodTypes.map((type) => (
                     <MenuItem key={type} value={type}>
                       {type}
@@ -434,41 +312,41 @@ const BloodDonorLookup = () => {
                   <Typography gutterBottom>
                     Khoảng cách tối đa: {maxDistance}km
                   </Typography>
-              <Slider
+                  <Slider
                     value={maxDistance}
-                    onChange={(e, newValue) => setMaxDistance(newValue)}
-                min={1}
-                max={50}
-                step={1}
-                marks={[
-                  { value: 1, label: '1km' },
-                  { value: 25, label: '25km' },
-                  { value: 50, label: '50km' }
-                ]}
+                    onChange={(e, newValue) => setMaxDistance(newValue as number)}
+                    min={1}
+                    max={50}
+                    step={1}
+                    marks={[
+                      { value: 1, label: '1km' },
+                      { value: 25, label: '25km' },
+                      { value: 50, label: '50km' }
+                    ]}
                     valueLabelDisplay="auto"
-              />
-            </Box>
+                  />
+                </Box>
                 <Box sx={{ width: { xs: '100%', md: '50%' } }}>
-              <FormControlLabel
-                control={
-                  <Switch
+                  <FormControlLabel
+                    control={
+                      <Switch
                         checked={emergencyOnly}
                         onChange={(e) => setEmergencyOnly(e.target.checked)}
-                  />
-                }
+                      />
+                    }
                     label="Chỉ hiển thị trường hợp khẩn cấp"
-              />
-              <FormControlLabel
-                control={
-                  <Switch
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
                         checked={availableOnly}
                         onChange={(e) => setAvailableOnly(e.target.checked)}
-                  />
-                }
+                      />
+                    }
                     label="Chỉ hiển thị người sẵn sàng hiến"
-              />
-            </Box>
-          </Grid>
+                  />
+                </Box>
+              </Grid>
             </Box>
           </Collapse>
 
@@ -482,7 +360,7 @@ const BloodDonorLookup = () => {
               Tìm kiếm
             </Button>
             <Button
-          variant="outlined"
+              variant="outlined"
               startIcon={<Refresh />}
               onClick={handleReset}
             >
@@ -502,6 +380,7 @@ const BloodDonorLookup = () => {
             {showCompatibilityGuide ? 'Ẩn hướng dẫn tương thích nhóm máu' : 'Xem hướng dẫn tương thích nhóm máu'}
           </Button>
         </Box>
+
         {/* Blood Compatibility Guide (Collapsible) */}
         <div ref={compatibilityGuideRef} />
         <Collapse in={showCompatibilityGuide} timeout="auto" unmountOnExit>
@@ -512,35 +391,35 @@ const BloodDonorLookup = () => {
         <Paper sx={{ p: 3, mt: 0, mb: 3 }}>
           <Typography variant="h6" gutterBottom>
             Thống kê hệ thống
-                </Typography>
+          </Typography>
           <Box display="flex" flexDirection="row" justifyContent="space-between" gap={2}>
             <Box flex={1} textAlign="center">
               <Typography variant="h4" color="primary">
-                {mockDonors.length}
-                </Typography>
+                {donors.length}
+              </Typography>
               <Typography variant="body2" color="text.secondary">
                 Người hiến máu
               </Typography>
-                </Box>
+            </Box>
             <Box flex={1} textAlign="center">
               <Typography variant="h4" color="secondary">
-                {mockDonors.filter(d => d.isAvailable).length}
+                {donors.filter(d => d.isAvailable).length}
               </Typography>
-                  <Typography variant="body2" color="text.secondary">
+              <Typography variant="body2" color="text.secondary">
                 Sẵn sàng hiến
-                  </Typography>
-                </Box>
+              </Typography>
+            </Box>
             <Box flex={1} textAlign="center">
               <Typography variant="h4" color="warning.main">
-                {mockRequests.filter(r => r.status === 'active').length}
+                {bloodRequests.filter(r => r.status === 'Pending').length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Yêu cầu đang chờ
               </Typography>
-              </Box>
+            </Box>
             <Box flex={1} textAlign="center">
               <Typography variant="h4" color="success.main">
-                {mockRequests.filter(r => r.status === 'completed').length}
+                {bloodRequests.filter(r => r.status === 'Completed').length}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 Đã hoàn thành
@@ -548,6 +427,19 @@ const BloodDonorLookup = () => {
             </Box>
           </Box>
         </Paper>
+
+        {/* Tạo Blood Request Button (đưa lên trên Tabs) */}
+        {/* <Box display="flex" justifyContent="flex-end" alignItems="center" mb={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddCircleOutline />}
+            onClick={() => setOpenCreateRequestDialog(true)}
+            sx={{ minWidth: 180, fontWeight: 600 }}
+          >
+            Tạo Blood Request
+          </Button>
+        </Box> */}
 
         {/* Results Tabs */}
         <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
@@ -564,12 +456,12 @@ const BloodDonorLookup = () => {
             <Tab
               label={
                 <Box display="flex" alignItems="center">
-                  <Badge badgeContent={filteredRequests.length} color="error">
+                  <Badge badgeContent={bloodRequests.length} color="error">
                     Yêu cầu cần máu
                   </Badge>
-                        </Box>
-                      }
-                    />
+                </Box>
+              }
+            />
           </Tabs>
         </Box>
 
@@ -608,9 +500,23 @@ const BloodDonorLookup = () => {
                     Thử điều chỉnh bộ lọc hoặc mở rộng khoảng cách tìm kiếm
                   </Typography>
                 </Paper>
-                  </Box>
+              </Box>
             )}
-                  </Box>
+          </Box>
+        )}
+
+{tabValue === 1 && (
+        <Box display="flex" justifyContent="flex-end" alignItems="center" mb={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<AddCircleOutline />}
+            onClick={() => setOpenCreateRequestDialog(true)}
+            sx={{ minWidth: 180, fontWeight: 600 }}
+          >
+            Tạo Blood Request
+          </Button>
+        </Box>
         )}
 
         {tabValue === 1 && (
@@ -625,12 +531,12 @@ const BloodDonorLookup = () => {
               gap: 3
             }}
           >
-            {filteredRequests.map((request) => (
-              <Box key={request.id}>
+            {bloodRequests.map((request) => (
+              <Box key={request.requestId || request.id}>
                 <RequestCard request={request} />
               </Box>
             ))}
-            {filteredRequests.length === 0 && (
+            {bloodRequests.length === 0 && (
               <Box sx={{ gridColumn: '1/-1' }}>
                 <Paper sx={{ p: 4, textAlign: 'center' }}>
                   <Typography variant="h6" color="text.secondary">
@@ -652,7 +558,7 @@ const BloodDonorLookup = () => {
               </IconButton>
             </Box>
           </DialogTitle>
-      <DialogContent>
+          <DialogContent>
             {selectedDonor && (
               <Box>
                 <Box display="flex" alignItems="center" mb={3}>
@@ -669,55 +575,62 @@ const BloodDonorLookup = () => {
                   </Box>
                 </Box>
 
-        <List>
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar>
+                <List>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
                         <Phone />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText 
-              primary="Số điện thoại" 
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText 
+                      primary="Số điện thoại" 
                       secondary={selectedDonor.phone}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar>
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
                         <Email />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText 
-              primary="Email" 
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText 
+                      primary="Email" 
                       secondary={selectedDonor.email}
-            />
-          </ListItem>
-          <ListItem>
-            <ListItemAvatar>
-              <Avatar>
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
                         <LocationOn />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText 
-              primary="Địa chỉ" 
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText 
+                      primary="Địa chỉ" 
                       secondary={selectedDonor.location}
-            />
-          </ListItem>
-        </List>
-        
+                    />
+                  </ListItem>
+                </List>
+                
                 <Alert severity="info" sx={{ mt: 2 }}>
                   Vui lòng liên hệ trực tiếp với người hiến máu để thỏa thuận thời gian và địa điểm hiến máu.
                 </Alert>
-        </Box>
+              </Box>
             )}
-      </DialogContent>
-      <DialogActions>
+          </DialogContent>
+          <DialogActions>
             <Button onClick={() => setOpenDialog(false)}>Hủy</Button>
             <Button variant="contained" onClick={handleRequestDonation}>
               Gửi yêu cầu
-          </Button>
-      </DialogActions>
-    </Dialog>
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* CREATE BLOOD REQUEST DIALOG */}
+        <CreateBloodRequestDialog
+          open={openCreateRequestDialog}
+          onClose={() => setOpenCreateRequestDialog(false)}
+          onSuccess={handleCreateRequestSuccess}
+        />
 
         {/* Snackbar */}
         <Snackbar
@@ -745,7 +658,7 @@ const BloodDonorLookup = () => {
         >
           <Tooltip title="Tìm kiếm nhanh">
             <IconButton
-            color="primary" 
+              color="primary" 
               sx={{
                 backgroundColor: 'primary.main',
                 color: 'white',
@@ -759,10 +672,10 @@ const BloodDonorLookup = () => {
             >
               <Search />
             </IconButton>
-        </Tooltip>
+          </Tooltip>
           <Tooltip title="Xem bản đồ">
             <IconButton
-            color="secondary" 
+              color="secondary" 
               sx={{
                 backgroundColor: 'secondary.main',
                 color: 'white',
@@ -779,8 +692,8 @@ const BloodDonorLookup = () => {
             >
               <Map />
             </IconButton>
-        </Tooltip>
-      </Box>
+          </Tooltip>
+        </Box>
 
         {/* Emergency Contact Banner */}
         <EmergencyCard sx={{ mt: 3, p: 3 }}>
@@ -789,14 +702,14 @@ const BloodDonorLookup = () => {
             <Box flex={1}>
               <Typography variant="h6" component="div">
                 Trường hợp khẩn cấp?
-      </Typography>
+              </Typography>
               <Typography variant="body2">
                 Liên hệ ngay với trung tâm cấp cứu hoặc bệnh viện gần nhất
-            </Typography>
-          </Box>
+              </Typography>
+            </Box>
             <Box>
-        <Button 
-          variant="outlined" 
+              <Button 
+                variant="outlined" 
                 sx={{
                   color: 'white',
                   borderColor: 'white',
@@ -808,21 +721,11 @@ const BloodDonorLookup = () => {
                 href="tel:115"
               >
                 Gọi 115
-        </Button>
-      </Box>
+              </Button>
+            </Box>
           </Box>
         </EmergencyCard>
-
-        {/* Footer Information */}
-        {/* <Box sx={{ mt: 4, py: 3, borderTop: 1, borderColor: 'divider' }}>
-          <Typography variant="body2" color="text.secondary" align="center">
-            Hệ thống hỗ trợ hiến máu - Kết nối yêu thương, cứu sống sinh mệnh
-          </Typography>
-          <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 1 }}>
-            Hotline: 1900-XXX-XXX | Email: support@blooddonation.vn
-          </Typography>
-        </Box> */}
-    </Container>
+      </Container>
     </ThemeProvider>
   );
 };

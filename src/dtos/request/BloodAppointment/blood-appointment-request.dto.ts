@@ -7,6 +7,7 @@ export interface DonationAppointmentDTO {
   status: string;
   location: string;
   note: string;
+  bloodVolume: number;
   donationForm?: DonationFormDTO;
   donationSchedule?: DonationScheduleDTO;
 }

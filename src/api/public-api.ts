@@ -7,7 +7,7 @@ import CreateUserDto from "../dtos/request/Users/create-user.dto"
 
 export default class PublicAPI {
     static async login(username: string, password: string, availableRole?: string) {
-        const axiosResposne = await api.post(ApiEndPoints.AuthEndpoints.LOGIN_ENDPOINT, {
+        const axiosResposne = await api.post("https://localhost:5000" + ApiEndPoints.AuthEndpoints.LOGIN_ENDPOINT, {
             citizenID: username,
             password: password
         });

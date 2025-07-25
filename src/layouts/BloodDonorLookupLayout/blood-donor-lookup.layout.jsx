@@ -18,10 +18,10 @@ const BloodDonorLookupLayout = () => {
 >
       <Header />
       <Box sx={{ flex: 1, py: 0 }}>
-        <BloodDonorLookup />
       </Box>
-      <Footer />
       <Outlet/>
+      <Footer />
+
     </Grid>
   );
 };
