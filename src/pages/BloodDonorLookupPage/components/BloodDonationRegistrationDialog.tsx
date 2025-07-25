@@ -19,20 +19,13 @@ interface BloodDonationRegistrationDialogProps {
   // ✅ Thêm props cho BloodRequest
   request?: any; // BloodRequest object
   currentUserId?: number;
-  onSuccess?: (matchingLog: any) => void;
+  onSuccess?: (result: boolean) => void;
   onError?: (error: string) => void;
 }
 
-interface DonationAppointmentDTO {
-  donationScheduleID: number;
-  status: string;
-  location: string;
-  note: string;
-  scheduledDate: string;
-  bloodVolume: number;
-  donationForm: any;
-  // ✅ Thêm thông tin BloodRequest
-  bloodRequestId?: number;
+// ✅ DTO đơn giản cho matching
+interface MatchDonorRequestDTO {
+  bloodRequestId: number;
 }
 
 const BloodDonationRegistrationDialog: React.FC<BloodDonationRegistrationDialogProps> = ({
@@ -51,7 +44,7 @@ const BloodDonationRegistrationDialog: React.FC<BloodDonationRegistrationDialogP
   
   const [activeStep, setActiveStep] = useState(0);
   
-  // ✅ States cho health form data
+  // ✅ States cho health form data - GIỮ NGUYÊN ĐỂ KIỂM TRA
   const [formData, setFormData] = useState<DonationFormData>({
     userID: 0,
     isDonated: false,
@@ -270,56 +263,43 @@ const BloodDonationRegistrationDialog: React.FC<BloodDonationRegistrationDialogP
     onClose();
   };
 
-  // ✅ Final submission - có thể là BloodRequest hoặc thông thường
+  // ✅ Final submission - CHỈ GỬI MATCHING REQUEST ĐƠN GIẢN
   const handleFinalSubmit = async () => {
     setLoading(true);
     try {
-      const getString = (arr: string[], other: string, fallback: string) => {
-        let str = arr.length > 0 ? arr.join(', ') : fallback;
-        if (arr.includes('Khác') && other) {
-          str += (str === fallback ? '' : ', ') + 'Khác: ' + other;
-        }
-        return str;
-      };
-
       if (isBloodRequestMode && request) {
-        // ✅ Mode BloodRequest - gọi API match donor với requester
-        const matchingData = {
-          requestId: request.requestId,
-          donorId: currentUserId || currentUser?.userID,
-          donationFormData: {
-            userID: formData.userID,
-            isDonated: formData.isDonated,
-            lastDonationDate: formData.lastDonationDate || null,
-            illness: getString(formData.illness, formData.illnessOther, 'Không có'),
-            dangerousIllness: getString(formData.dangerousIllness, formData.dangerousIllnessOther, 'Không có'),
-            twelveMonthProblem: getString(formData.twelveMonthProblem, formData.twelveMonthProblemOther, 'Không có'),
-            sixMonthProblem: getString(formData.sixMonthProblem, formData.sixMonthProblemOther, 'Không có'),
-            oneMonthProblem: getString(formData.oneMonthProblem, formData.oneMonthProblemOther, 'Không có'),
-            fourteenDayProblem: getString(formData.fourteenDayProblem, formData.fourteenDayProblemOther, 'Không có'),
-            sevenDayProblem: getString(formData.sevenDayProblem, formData.sevenDayProblemOther, 'Không có'),
-            womanProblem: getString(formData.womanProblem, formData.womanProblemOther, 'Không áp dụng'),
-          },
-          note: note.trim(),
-          scheduledDate: selectedDate,
-          volume: bloodVolume
+        // ✅ CHỈ GỬI DTO ĐỢN GIẢN - FORM DATA CHỈ ĐỂ KIỂM TRA
+        const matchingRequest: MatchDonorRequestDTO = {
+          bloodRequestId: request.requestId
         };
 
-        console.log('BloodRequest matching data:', JSON.stringify(matchingData, null, 2));
+        console.log('Matching request data:', JSON.stringify(matchingRequest, null, 2));
+        console.log('Form data (chỉ để kiểm tra):', JSON.stringify(formData, null, 2));
         
-        // Call blood request matching API
-        const result = await PublicAPI.matchBloodRequestDonor(matchingData);
+        // ✅ Gọi API matching với userId từ route và DTO đơn giản
+        const userId = currentUserId || currentUser?.userID;
+        const result = await PublicAPI.matchDonorToBloodRequest(userId, matchingRequest);
+        
+        console.log('✅ Matching result:', result);
         
         setIsSuccess(true);
         
-        // Call success callback
+        // Call success callback với boolean result
         if (onSuccess) {
-          onSuccess(result);
+          onSuccess(result.data); // result.data should be boolean
         }
         
       } else {
         // ✅ Mode thông thường - tạo appointment như cũ
-        const dto: DonationAppointmentDTO = {
+        const getString = (arr: string[], other: string, fallback: string) => {
+          let str = arr.length > 0 ? arr.join(', ') : fallback;
+          if (arr.includes('Khác') && other) {
+            str += (str === fallback ? '' : ', ') + 'Khác: ' + other;
+          }
+          return str;
+        };
+
+        const dto = {
           donationScheduleID: selectedDonationScheduleId!,
           status: 'pending',
           location: location.trim(),
@@ -415,7 +395,8 @@ const BloodDonationRegistrationDialog: React.FC<BloodDonationRegistrationDialogP
               <Alert severity="info" sx={{ mb: 3 }}>
                 <Typography variant="body2">
                   <strong>Đăng ký hiến máu cho yêu cầu #{request?.requestId}</strong><br/>
-                  Thông tin lịch hẹn đã được tự động điền dựa trên yêu cầu hiến máu.
+                  Thông tin lịch hẹn đã được tự động điền dựa trên yêu cầu hiến máu.<br/>
+                  <em>Form sức khỏe chỉ để kiểm tra, khi xác nhận sẽ chỉ gửi thông tin matching đơn giản.</em>
                 </Typography>
               </Alert>
               

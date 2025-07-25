@@ -344,7 +344,7 @@ const DonorCard: React.FC<DonorCardProps> = ({ donor, handleContact }) => {
           </Box>
 
           {/* Distance */}
-          {donor.distance !== undefined && (
+          {/* {donor.distance !== undefined && (
             <Box display="flex" alignItems="center" justifyContent="space-between">
               <Box display="flex" alignItems="center">
                 <LocationOn sx={{ fontSize: '16px', mr: 1, color: 'text.secondary' }} />
@@ -365,7 +365,7 @@ const DonorCard: React.FC<DonorCardProps> = ({ donor, handleContact }) => {
                 }}
               />
             </Box>
-          )}
+          )} */}
         </Stack>
 
         <Divider sx={{ my: 2, opacity: 0.3 }} />

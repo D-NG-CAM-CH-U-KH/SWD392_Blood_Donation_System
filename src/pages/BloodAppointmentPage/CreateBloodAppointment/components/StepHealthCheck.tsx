@@ -37,7 +37,7 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
   const { user, loading: userLoading, error: userError, isAuthenticated, refetch } = useCurrentUser();
   const userGender: 'male' | 'female' = user?.gender || 'male';
 
-  // ✅ Early return with loading state
+  // Loading state cho user data
   if (userLoading) {
     return (
       <Box>
@@ -47,7 +47,7 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
     );
   }
 
-  // ✅ Early return with error state
+  // Error state cho user data
   if (userError || !isAuthenticated) {
     return (
       <Alert severity="error" action={
@@ -65,19 +65,7 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
     );
   }
 
-  // ✅ Early return if formData is not ready
-  if (!formData) {
-    return (
-      <Box>
-        <Skeleton variant="text" width="60%" height={40} />
-        <Skeleton variant="rectangular" width="100%" height={300} sx={{ mt: 2 }} />
-      </Box>
-    );
-  }
-
   const validateForm = (): boolean => {
-    if (!formData) return false;
-
     const newErrors: { [key: string]: string } = {};
     
     // Validate donation history
@@ -113,8 +101,10 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
       let result: EligibilityCheckResult;
       
       if (useBackendCheck) {
+        // ✅ Gọi API Backend
         await checkEligibilityWithBackend();
       } else {
+        // ✅ Sử dụng Frontend checker (fallback)
         await new Promise(resolve => setTimeout(resolve, 1500));
         result = DonorEligibilityChecker.checkEligibility(formData, userGender);
         setEligibilityResult(result);
@@ -132,10 +122,18 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
   };
 
   const checkEligibilityWithBackend = async () => {
+    // ✅ Enhanced debugging
     console.log('=== USER DEBUG INFO ===');
     console.log('Current user object:', user);
+    console.log('User ID (userID):', user?.userID);
+    console.log('User ID (id):', user?.id);
+    console.log('User ID (userId):', user?.userId);
+    console.log('User ID (UserID):', user?.UserID);
+    console.log('User structure keys:', Object.keys(user || {}));
+    console.log('User full object:', JSON.stringify(user, null, 2));
     console.log('Form data userID:', formData.userID);
     
+    // ✅ Try different ID extraction methods
     const possibleUserIds = [
       user?.userID,
       user?.id, 
@@ -144,12 +142,23 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
       formData.userID
     ];
     
+    console.log('All possible user IDs:', possibleUserIds);
+    
+    // ✅ Find first valid ID
     const validUserId = possibleUserIds.find(id => 
       id !== undefined && id !== null && id !== 0 && id !== ''
     );
     
+    console.log('Selected valid user ID:', validUserId);
+    console.log('Type of selected ID:', typeof validUserId);
+    
+    // ✅ If no valid ID found, show detailed error
     if (!validUserId) {
       console.error('❌ NO VALID USER ID FOUND!');
+      console.log('User loading state:', userLoading);
+      console.log('User authenticated:', isAuthenticated);
+      console.log('User error:', userError);
+      
       setErrors({ 
         general: 'Không thể xác định ID người dùng. Vui lòng đăng nhập lại.' 
       });
@@ -177,10 +186,15 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
         womanProblem: formData.womanProblem,
         womanProblemOther: formData.womanProblemOther
       };
-
+  
+      console.log('=== API REQUEST DEBUG ===');
       console.log('Using user ID:', validUserId);
+      console.log('Request URL will be:', `https://localhost:5000/api/v1/donor-eligibility/check/${validUserId}`);
       console.log('Request data:', requestData);
+      console.log('Auth token exists:', !!localStorage.getItem('ACCESS_TOKEN'));
+      console.log('Auth token preview:', localStorage.getItem('ACCESS_TOKEN')?.substring(0, 20) + '...');
       
+      // ✅ Use the valid user ID instead of user?.userID
       const result = await PrivateAPI.checkDonorEligibility(validUserId, requestData);
       
       console.log('✅ Backend API success:', result);
@@ -192,6 +206,11 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
       
     } catch (error: any) {
       console.error('❌ Backend eligibility check failed:', error);
+      console.log('Error details:', {
+        status: error.response?.status,
+        message: error.message,
+        response: error.response?.data
+      });
       
       // Fallback to frontend check
       console.log('🔄 Falling back to frontend eligibility check...');
@@ -214,22 +233,13 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
   };
 
   const canCheckEligibility = () => {
-    if (!formData || !healthQuestions || healthQuestions.length === 0) {
-      return false;
-    }
-
     return healthQuestions.every(question => {
       const value = formData[question.key as keyof DonationFormData] as string[];
       return value && value.length > 0;
     }) && (!formData.isDonated || formData.lastDonationDate);
   };
 
-  // ✅ Fixed validateLastDonation with proper checks
   const validateLastDonation = (): string => {
-    if (!formData || typeof formData.isDonated === 'undefined') {
-      return '';
-    }
-    
     if (!formData.isDonated || !formData.lastDonationDate) {
       return '';
     }
@@ -307,7 +317,7 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
           <FormControlLabel
             control={
               <Checkbox
-                checked={formData.isDonated || false}
+                checked={formData.isDonated}
                 onChange={(e) => setFormData((prev) => ({
                   ...prev,
                   isDonated: e.target.checked,
@@ -323,7 +333,7 @@ const StepHealthCheck: React.FC<StepHealthCheckProps> = ({
               fullWidth
               type="date"
               label="Ngày hiến máu gần nhất *"
-              value={formData.lastDonationDate || ''}
+              value={formData.lastDonationDate}
               onChange={(e) => setFormData((prev) => ({
                 ...prev,
                 lastDonationDate: e.target.value
