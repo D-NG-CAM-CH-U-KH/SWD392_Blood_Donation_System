@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import DefaultLayout from '~/layouts/DefaultLayout/default.layout'
 import ProfileLayout from '~/layouts/ProfileLayout/profile.layout'
 import BloodAppointmentLayout from '~/layouts/BloodDonationLayout/bloodappointment.layout'
+import BloodAppointmentHistoryLayout from '~/layouts/BloodDonationLayout/blood-appointment-history.layout'
 import LandingPage from '~/pages/LandingPage/LandingPage'
 import UserProfile from '~/pages/UserPage/UserProfile'
 import UserProfileForm from '~/pages/UserPage/UserProfile.component'
@@ -11,9 +12,13 @@ import PublicRoutesComponent from './public.routes'
 import PageEndpoints from '~/meta-data/contants/page-endpoints'
 import ProfileCard from '~/pages/ProfilePage/ProfileCard'
 import CreateBloodRequest from '~/pages/BloodRequestPage/BloodRequest.jsx';
-import BloodAppointment from "~/pages/BloodAppointmentPage/BloodAppointment.component";
+import BloodAppointment from "~/pages/BloodAppointmentPage/CreateBloodAppointment/BloodAppointment.component";
+import BloodDonationAppointmentList from '~/pages/BloodAppointmentPage/ViewBloodAppointmentHistory/BloodAppointmentHistory.component'
+import Index from '~/pages/StaffManagement/Index'
 import BloodDonorLookup from '~/pages/BloodDonorLookupPage/BloodDonorLookupPage.component'
 import BloodDonorLookupLayout from '~/layouts/BloodDonorLookupLayout/blood-donor-lookup.layout'
+import PrivateRoutesComponent from './private.routes';
+import ForbiddenPage from '~/layouts/ForbiddenPage';
 
 
 const RouteComponent = () => {
@@ -27,22 +32,27 @@ const RouteComponent = () => {
         <Route path="/profile" element={<ProfileCard />} />
       </Route>
 
-      {/* Route for CreateBloodRequest */}
-      <Route path="/request/create" element={<CreateBloodRequest />} />
+      <Route path="/blood-request/create" element={<CreateBloodRequest />} />
 
       {/* Route for BloodAppointment */}
-      <Route element={<BloodAppointmentLayout />}>
-        <Route path="/blood-donation/create" element={<BloodAppointment />} />
+      <Route element={<DefaultLayout />}>
+        <Route path={PageEndpoints.PrivateEndpoints.CREATE_BLOOD_DONATION} element={<BloodAppointment />} />
       </Route>
 
-      {/* Route for BloodDonorSearchLookup */}
-      <Route element={<BloodDonorLookupLayout />}>
-        <Route path="/blood-donor/lookup" element={<BloodDonorLookup />} />
+      <Route element={<BloodAppointmentHistoryLayout />}>
+        <Route path="/blood-donation/view-all" element={<BloodDonationAppointmentList />} />
       </Route>
+
+      <Route element={<Index />}>
+        <Route path="/staff" element={<Index />} />
+      </Route>
+
+      <Route path={PageEndpoints.ErrorEndpoints.PERMISSION_DENIED_ENDPOINT} element={<ForbiddenPage />} />
 
       {PublicRoutesComponent()}
+      {PrivateRoutesComponent()}
     </Routes>
-  )
-}
+  );
+};
 
-export default RouteComponent
+export default RouteComponent;

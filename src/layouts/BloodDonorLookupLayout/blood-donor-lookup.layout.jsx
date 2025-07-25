@@ -4,6 +4,7 @@ import Header from '../Header';
 import Footer from '../Footer';
 import { BG_COLOR } from '~/theme';
 import BloodDonorLookup from '~/pages/BloodDonorLookupPage/BloodDonorLookupPage.component';
+import { Outlet } from 'react-router-dom';
 
 const BloodDonorLookupLayout = () => {
   return (
@@ -17,9 +18,10 @@ const BloodDonorLookupLayout = () => {
 >
       <Header />
       <Box sx={{ flex: 1, py: 0 }}>
-        <BloodDonorLookup />
       </Box>
+      <Outlet/>
       <Footer />
+
     </Grid>
   );
 };

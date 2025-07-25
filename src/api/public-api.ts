@@ -7,7 +7,7 @@ import CreateUserDto from "../dtos/request/Users/create-user.dto"
 
 export default class PublicAPI {
     static async login(username: string, password: string, availableRole?: string) {
-        const axiosResposne = await api.post(ApiEndPoints.AuthEndpoints.LOGIN_ENDPOINT, {
+        const axiosResposne = await api.post("https://localhost:5000" + ApiEndPoints.AuthEndpoints.LOGIN_ENDPOINT, {
             citizenID: username,
             password: password
         });
@@ -15,11 +15,11 @@ export default class PublicAPI {
         const data = response.data;
 
         if (availableRole && data.roles.includes(availableRole)) {
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('ACCESS_TOKEN', data.token);
         }
         else throw new Error('Role is not valid!');
 
-        return response;
+        return response.data;
     }
 
     static async signUp(signUpForm: CreateUserDto) {
@@ -61,5 +61,18 @@ export default class PublicAPI {
             token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
         );
         return axiosResponse.data;
+    }
+
+    static async getDonationAppointmentsByUserId(userId: number) {
+        const token = localStorage.getItem('token');
+        const axiosResponse = await api.get(
+            `https://localhost:5000/api/v1/donation-appointment/${userId}`,
+            token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
+        );
+
+        const jsonString = JSON.stringify(axiosResponse.data, null, 2);
+        console.log("Response JSON:\n", jsonString);
+
+        return axiosResponse.data.data;
     }
 }
