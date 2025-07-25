@@ -1,4 +1,5 @@
 export interface GetUserResponseDTO {
+  citizenID: string;
   firstName: string;
   lastName: string;
   email: string;

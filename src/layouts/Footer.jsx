@@ -13,7 +13,8 @@ function Footer() {
         sx={{
           backgroundColor: BG_COLOR,
           px: 3, // padding trái phải cho khoảng cách sát lề
-          py: 4, // padding trên dưới
+          pt: 6, // top padding (increase as needed)
+          pb: 4,
           color: RED_600,
         }}
       >

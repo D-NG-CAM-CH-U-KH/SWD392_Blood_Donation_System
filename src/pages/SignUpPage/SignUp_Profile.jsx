@@ -62,7 +62,7 @@ const SignUp_Profile = forwardRef(({ signUpForm, setSignUpForm }, ref) => {
 
   const onNext = async () => {
     if (signUpForm.password !== confirmPassword) {
-      toast.error("Mật khẩu và xác nhận mật khẩu không khớp.");
+      toast.error("Password and confirmed password are not the same.");
       return false;
     }
 
@@ -73,7 +73,7 @@ const SignUp_Profile = forwardRef(({ signUpForm, setSignUpForm }, ref) => {
     };
 
     if (!isSignUpFormValid(updatedForm)) {
-      toast.error("Bạn cần điền đầy đủ thông tin!");
+      toast.error("Some fields are empty!");
       return false;
     }
 
