@@ -48,7 +48,7 @@ export default class PrivateAPI {
           throw error;
         }
       }
-    }
+    
 
     static async createCertificateWithImage(formData: any): Promise<any> {
         const data = new FormData();
