@@ -35,7 +35,7 @@ function Header() {
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <img src="src/assets/images/Logo.png" width="25" height="25" alt="Logo" />
+            <img src="/images/Logo.png" width="25" height="25" alt="Logo" />
             <Typography
               variant="h6"
               noWrap

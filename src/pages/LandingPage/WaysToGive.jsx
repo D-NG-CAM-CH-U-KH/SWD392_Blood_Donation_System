@@ -29,7 +29,7 @@ function WaysToGive() {
         }}
       >
         <img
-          src="/src/assets/images/heart.png"
+          src="/images/heart.png"
           style={{ width: 100, height: 100 }}
           alt="heart"
         />
